@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 //Creating a user account
                 moveMainPage(task.result?.user)
-            }else if (task.exception?.message.isNullOrEmpty()!!){
+            }else if (task.exception?.message.isNullOrEmpty()){
                 //show the error messagge
                 Toast.makeText(this,task.exception?.message,Toast.LENGTH_LONG).show()
             }else {
