@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -38,6 +39,18 @@ class LoginActivity : AppCompatActivity() {
     fun googleLogin() {
         var signInIntent = googleSignInClient?.signInIntent
         startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GOOGLE_LOGIN_CODE) {
+            var result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            if (result.isSuccess) {
+                var account = result.signInAccount
+                //Second step
+                firebaseAuthWithGoogle(account)
+            }
+        }
     }
 
     fun signinAndSignup() {
