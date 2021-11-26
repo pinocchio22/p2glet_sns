@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -49,6 +51,20 @@ class LoginActivity : AppCompatActivity() {
                 var account = result.signInAccount
                 //Second step
                 firebaseAuthWithGoogle(account)
+            }
+        }
+    }
+
+    fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
+        var credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+        auth?.signInWithCredential(credential)?.addOnCompleteListener {
+                task ->
+            if (task.isSuccessful) {
+                //Login
+                moveMainPage(task.result?.user)
+            }else {
+                //Show the error message
+                Toast.makeText(this,task.exception?.message,Toast.LENGTH_LONG).show()
             }
         }
     }
