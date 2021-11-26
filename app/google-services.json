@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "485918985405",
+    "project_id": "p2glet-sns",
+    "storage_bucket": "p2glet-sns.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485918985405:android:89e2aae4e70c3fdd63bbd4",
+        "android_client_info": {
+          "package_name": "com.example.p2glet_sns"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485918985405-f0bt109rb85ngf9rimubd9909kik0soa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARDf1RSexgVItpIRBB68Cbf1afyFpD96w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485918985405-f0bt109rb85ngf9rimubd9909kik0soa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
