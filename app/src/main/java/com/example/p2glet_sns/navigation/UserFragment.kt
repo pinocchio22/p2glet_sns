@@ -16,7 +16,7 @@ import com.example.p2glet_sns.R
 class UserFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_user,container,false)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 }
