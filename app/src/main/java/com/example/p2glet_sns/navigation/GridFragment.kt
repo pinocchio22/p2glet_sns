@@ -13,7 +13,7 @@ import com.example.p2glet_sns.R
  * @created 2021-11-30
  * @desc
  */
-class DetailViewFragment : Fragment() {
+class GridFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
