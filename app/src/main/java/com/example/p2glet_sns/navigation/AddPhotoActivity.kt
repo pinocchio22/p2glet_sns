@@ -1,5 +1,6 @@
 package com.example.p2glet_sns.navigation
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -30,5 +31,21 @@ class AddPhotoActivity : AppCompatActivity() {
             contentUpload()
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_FROM_ALBUM) {
+            if(resultCode == Activity.RESULT_OK) {
+                //This is path to the selected image
+                photoUri = data?.data
+                addphoto_image.setImageURI(photoUri)
+
+            }else{
+                //Exit the addPhotoActivity if you leave the album without selecting it
+                finish()
+            }
+        }
+    }
+
 
 }
