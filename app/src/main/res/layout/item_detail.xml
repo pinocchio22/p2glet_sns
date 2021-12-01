@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="like 0"
-        android:id="@+id/detailviewitem_favorite_textview"/>
+        android:id="@+id/detailviewitem_favoritecounter_textview"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
