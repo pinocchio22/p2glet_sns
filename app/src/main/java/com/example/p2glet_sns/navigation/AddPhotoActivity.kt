@@ -5,10 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.p2glet_sns.R
 import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_photo.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddPhotoActivity : AppCompatActivity() {
     var PICK_IMAGE_FROM_ALBUM = 0
@@ -47,5 +50,17 @@ class AddPhotoActivity : AppCompatActivity() {
         }
     }
 
+    fun contentUpload() {
+        // Make filename
+
+        var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        var imageFileName = "IMAGE_" + timestamp + "_.png"
+        var storageRef = storage?.reference?.child("images")?.child(imageFileName)
+
+        //FileUpload
+        storageRef?.putFile(photoUri!!)?.addOnSuccessListener {
+            Toast.makeText(this, getString(R.string.upload_success), Toast.LENGTH_LONG).show()
+        }
+    }
 
 }
