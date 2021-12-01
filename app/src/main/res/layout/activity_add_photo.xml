@@ -49,5 +49,6 @@
         android:id="@+id/addphoto_btn_upload"
         android:layout_toRightOf="@id/addphoto_image"
         android:layout_below="@id/editText"
-        android:theme="@style/ButtonStyle"/>
+        android:theme="@style/ButtonStyle"
+        android:text="Upload Photo" />
 </RelativeLayout>
