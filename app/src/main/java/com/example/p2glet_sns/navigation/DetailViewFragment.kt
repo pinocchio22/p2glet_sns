@@ -24,11 +24,11 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 class DetailViewFragment : Fragment() {
 
     var firestore : FirebaseFirestore? = null
-//    var uid : String? = null
-    var uid = null
+    var uid : String? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
         firestore = FirebaseFirestore.getInstance()
+        uid = FirebaseAuth.getInstance().currentUser?.uid
 
         view.detailviewfragment_recyclerview.adapter = DetailViewRecyclerViewAdapter()
         view.detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
@@ -80,8 +80,8 @@ class DetailViewFragment : Fragment() {
             //likes
             viewholder.detailviewitem_favoritecounter_textview.text = "Likes" + contentDTOs!![position].favoriteCount
 
-            //ProfileImage
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
+//            //ProfileImage
+//            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
 
             //This code is when the button is clicked
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {
