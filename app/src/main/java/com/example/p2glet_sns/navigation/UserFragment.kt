@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -28,8 +29,15 @@ class UserFragment : Fragment() {
     var uid : String? = null
     var auth : FirebaseAuth? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_user,container,false)
-        return view
+        fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user,container,false)
+        uid = arguments?.getString("destinationUid")
+        firestore = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+
+        fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
+        fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
+
+        return fragmentView
     }
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -54,7 +62,7 @@ class UserFragment : Fragment() {
             return CustomViewHolder(imageView)
         }
 
-        inner class CustomViewHolder(var imageView: ImageView) : RecyclerView.ViewHolder() {
+        inner class CustomViewHolder(var imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
 
         }
 
