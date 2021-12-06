@@ -17,6 +17,7 @@ import com.example.p2glet_sns.LoginActivity
 import com.example.p2glet_sns.MainActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
+import com.example.p2glet_sns.navigation.model.FollowDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,6 +64,9 @@ class UserFragment : Fragment() {
             mainactivity?.toolbar_title_image?.visibility = View.GONE
             mainactivity?.toolbar_username?.visibility = View.VISIBLE
             mainactivity?.toolbar_btn_back?.visibility = View.VISIBLE
+            fragmentView?.account_btn_follow_signout?.setOnClickListener {
+                requestFollow()
+            }
 
         }
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
@@ -75,6 +79,58 @@ class UserFragment : Fragment() {
         }
         getProfileImage()
         return fragmentView
+    }
+
+    fun requestFollow() {
+        //Save data to my account
+        var tsDocFollowing = firestore?.collection("users")?.document(currentUserUid!!)
+        firestore?.runTransaction { transaction ->
+            var followDTO = transaction.get(tsDocFollowing!!).toObject(FollowDTO::class.java)
+            if (followDTO == null) {
+                followDTO = FollowDTO()
+                followDTO!!.followingCount = 1
+                followDTO!!.followers[uid!!] = true
+
+                transaction.set(tsDocFollowing,followDTO)
+                return@runTransaction
+            }
+
+            if (followDTO.followings.containsKey(uid)) {
+                //It remove following third person when a third person follow me
+                followDTO.followingCount = followDTO?.followingCount - 1
+                followDTO.followers?.remove(uid)
+            }else {
+                //It add following third person when a third person do not follow me
+                followDTO.followingCount = followDTO?.followingCount + 1
+                followDTO.followers[uid!!] = true
+            }
+            transaction.set(tsDocFollowing, followDTO)
+            return@runTransaction
+        }
+        //Save data to third person
+        var tsDocFollower = firestore?.collection("users")?.document(uid!!)
+        firestore?.runTransaction { transaction ->
+            var followDTO = transaction.get(tsDocFollower!!).toObject(FollowDTO::class.java)
+            if (followDTO == null) {
+                followDTO = FollowDTO()
+                followDTO!!.followerCount = 1
+                followDTO!!.followers[currentUserUid!!] = true
+
+                transaction.set(tsDocFollower, followDTO!!)
+                return@runTransaction
+            }
+            if (followDTO!!.followers.containsKey(currentUserUid)) {
+                //It cancel my follower when I follow a third person
+                followDTO!!.followerCount = followDTO!!.followerCount - 1
+                followDTO!!.followers.remove(currentUserUid)
+            }else {
+                //It add my follower when I don't follow a third person
+                followDTO!!.followerCount = followDTO!!.followerCount + 1
+                followDTO!!.followers[currentUserUid!!] = true
+            }
+            transaction.set(tsDocFollower, followDTO!!)
+            return@runTransaction
+        }
     }
 
     fun getProfileImage() {
