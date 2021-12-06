@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideContext
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.LoginActivity
 import com.example.p2glet_sns.MainActivity
@@ -72,7 +73,18 @@ class UserFragment : Fragment() {
             photoPickerIntent.type = "image/*"
             activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
         }
+        getProfileImage()
         return fragmentView
+    }
+
+    fun getProfileImage() {
+        firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            if (documentSnapshot == null) return@addSnapshotListener
+            if (documentSnapshot.data != null) {
+                var url = documentSnapshot?.data!!["image"]
+                Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile)
+            }
+        }
     }
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
