@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -21,6 +22,9 @@ class CommentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment)
         contentUid = intent.getStringExtra("contentUid")
+
+        comment_recyclerview.adapter = CommentRecyclerviewAdapter()
+        comment_recyclerview.layoutManager = LinearLayoutManager(this)
 
         comment_btn_send?.setOnClickListener {
             var comment = ContentDTO.Comment()
@@ -68,7 +72,7 @@ class CommentActivity : AppCompatActivity() {
 
             FirebaseFirestore.getInstance().collection("profileImages").document(comments[position].uid!!).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    var url = task.result!!["images"]
+                    var url = task.result!!["image"]
                     Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.commentviewitem_imageview_profile)
                 }
             }
