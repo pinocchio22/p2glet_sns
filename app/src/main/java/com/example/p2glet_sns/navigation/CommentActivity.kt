@@ -2,6 +2,8 @@ package com.example.p2glet_sns.navigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
@@ -26,5 +28,38 @@ class CommentActivity : AppCompatActivity() {
 
             comment_edit_message.setText("")
         }
+    }
+
+    inner class CommentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        var comments : ArrayList<ContentDTO.Comment> = arrayListOf()
+        init {
+            FirebaseFirestore.getInstance()
+                .collection("images")
+                .document(contentUid!!)
+                .collection("comments")
+                .orderBy("timestamp")
+                .addSnapshotListener { value, error ->
+                    comments.clear()
+                    if (value == null) return@addSnapshotListener
+                    for (snapshot in value.documents!!)
+                    {
+                        comments.add(snapshot.toObject(ContentDTO.Comment::class.java)!!)
+                    }
+                    notifyDataSetChanged()
+                }
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            TODO("Not yet implemented")
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override fun getItemCount(): Int {
+            TODO("Not yet implemented")
+        }
+
     }
 }
