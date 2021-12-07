@@ -3,6 +3,7 @@ package com.example.p2glet_sns.navigation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2glet_sns.R
@@ -10,6 +11,7 @@ import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_comment.*
+import kotlinx.android.synthetic.main.item_comment.view.*
 
 class CommentActivity : AppCompatActivity() {
     var contentUid : String? = null
@@ -55,14 +57,16 @@ class CommentActivity : AppCompatActivity() {
             return CustomViewHolder(view)
         }
 
-        private
+        private inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            TODO("Not yet implemented")
+            var view = holder.itemView
+            view.commentviewitem_textview_comment.text = comments[position].comment
+            view.commentviewitem_textview_profile.text = comments[position].userId
         }
 
         override fun getItemCount(): Int {
-            TODO("Not yet implemented")
+            return comments.size
         }
 
     }
