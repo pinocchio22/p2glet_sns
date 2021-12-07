@@ -2,6 +2,7 @@ package com.example.p2glet_sns.navigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2glet_sns.R
@@ -30,7 +31,7 @@ class CommentActivity : AppCompatActivity() {
         }
     }
 
-    inner class CommentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         var comments : ArrayList<ContentDTO.Comment> = arrayListOf()
         init {
@@ -50,8 +51,11 @@ class CommentActivity : AppCompatActivity() {
                 }
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            TODO("Not yet implemented")
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment,parent,false)
+            return CustomViewHolder(view)
         }
+
+        private
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             TODO("Not yet implemented")
