@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
@@ -63,6 +65,13 @@ class CommentActivity : AppCompatActivity() {
             var view = holder.itemView
             view.commentviewitem_textview_comment.text = comments[position].comment
             view.commentviewitem_textview_profile.text = comments[position].userId
+
+            FirebaseFirestore.getInstance().collection("profileImages").document(comments[position].uid!!).get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    var url = task.result!!["images"]
+                    Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.commentviewitem_imageview_profile)
+                }
+            }
         }
 
         override fun getItemCount(): Int {
