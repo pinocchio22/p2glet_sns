@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_user.view.*
+import kotlinx.android.synthetic.main.fragment_grid.view.*
 
 /**
  * @author CHOI
@@ -27,14 +28,17 @@ class GridFragment : Fragment() {
     var fragmentView : View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false)
-        return view
+        fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false)
+        firestore = FirebaseFirestore.getInstance()
+        fragmentView?.gridfragment_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
+        fragmentView?.gridfragment_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
+        return fragmentView
     }
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         init {
-            firestore?.collection("images")?.whereEqualTo("uid",uid)?.addSnapshotListener { querySnapshot, firebaseFirestore ->
+            firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
                 //Somtimes, This code return null of querySnapshot when it signout
                 if (querySnapshot == null) return@addSnapshotListener
 
@@ -42,7 +46,6 @@ class GridFragment : Fragment() {
                 for (snapshot in querySnapshot.documents) {
                     contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
                 }
-                fragmentView?.account_tv_post_count?.text = contentDTOs.size.toString()
                 notifyDataSetChanged()
             }
         }
