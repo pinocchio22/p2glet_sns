@@ -126,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
         callbackManager?.onActivityResult(requestCode,resultCode,data)
         if (requestCode == GOOGLE_LOGIN_CODE) {
             var result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) {
+            if (result!!.isSuccess) {
                 var account = result.signInAccount
                 //Second step
                 firebaseAuthWithGoogle(account)
