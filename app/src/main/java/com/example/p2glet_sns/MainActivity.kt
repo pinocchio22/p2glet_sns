@@ -66,14 +66,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     fun registerPushToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
-            if (it.isSuccessful) return@addOnCompleteListener
+            if (!it.isSuccessful) return@addOnCompleteListener
 
             val token = it.result
             val uid = FirebaseAuth.getInstance().currentUser?.uid
             val map = mutableMapOf<String, Any>()
             map["pushToken"] = token!!
 
-            FirebaseFirestore.getInstance().collection("pushTokens").document(uid!!).set(map)
+            FirebaseFirestore.getInstance().collection("pushtokens").document(uid!!).set(map)
         }
     }
 
