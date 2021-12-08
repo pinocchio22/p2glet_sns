@@ -37,7 +37,7 @@ class CommentActivity : AppCompatActivity() {
             comment.timestamp = System.currentTimeMillis()
 
             FirebaseFirestore.getInstance().collection("images").document(contentUid!!).collection("comments").document().set(comment)
-            commentAlarm(destinationUid = ,comment_edit_message.text.toString())
+            commentAlarm(destinationUid!!,comment_edit_message.text.toString())
             comment_edit_message.setText("")
         }
     }
