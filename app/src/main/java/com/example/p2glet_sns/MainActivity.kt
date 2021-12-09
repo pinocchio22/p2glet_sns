@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.p2glet_sns.navigation.*
+import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -86,6 +87,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         //Set default screen
         bottom_navigation.selectedItemId = R.id.action_home
         registerPushToken()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        FcmPush.instance.sendMessage("5fNdThDvv9b20ZE3TfOm7LNAjiZ2","hi","bye")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
