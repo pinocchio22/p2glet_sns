@@ -38,7 +38,7 @@ class FcmPush {
                 var pushDTO = PushDTO()
 
                 pushDTO.to = token
-                pushDTO.notification.titile = title
+                pushDTO.notification.title = title
                 pushDTO.notification.body = message
 
                 var body = RequestBody.create(JSON,gson?.toJson(pushDTO))

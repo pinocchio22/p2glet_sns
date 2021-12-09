@@ -89,10 +89,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         registerPushToken()
     }
 
-    override fun onStop() {
-        super.onStop()
-        FcmPush.instance.sendMessage("5fNdThDvv9b20ZE3TfOm7LNAjiZ2","hi","bye")
-    }
+//    //test push
+//    override fun onStop() {
+//        super.onStop()
+//        FcmPush.instance.sendMessage("5fNdThDvv9b20ZE3TfOm7LNAjiZ2","hi","bye")
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

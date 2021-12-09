@@ -14,6 +14,6 @@ data class PushDTO (
 ){
     data class Notification(
         var body : String? = null,
-        var titile : String? = null
+        var title : String? = null
     )
 }
