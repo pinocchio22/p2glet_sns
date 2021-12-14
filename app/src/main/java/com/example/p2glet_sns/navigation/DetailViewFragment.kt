@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.p2glet_sns.ChatActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -117,6 +118,8 @@ class DetailViewFragment : Fragment() {
 //                intent.putExtra("destinationUid", contentDTOs[position].uid)
 //                startActivity(intent)
                 var intent = Intent(v.context, ChatActivity::class.java)
+                intent.putExtra("destinationUid", contentDTOs[position].uid)
+                startActivity(intent)
             }
         }
         fun favoriteEvent(position: Int) {
