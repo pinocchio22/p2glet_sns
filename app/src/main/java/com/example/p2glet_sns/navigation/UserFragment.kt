@@ -26,6 +26,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author CHOI
@@ -34,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_user.view.*
  * @desc
  */
 class UserFragment : Fragment() {
+
     var fragmentView : View? = null
     var firestore : FirebaseFirestore? = null
     var uid : String? = null

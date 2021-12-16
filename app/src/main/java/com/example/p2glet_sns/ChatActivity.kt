@@ -212,6 +212,7 @@ import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_chat.*
 import kotlinx.android.synthetic.main.item_chat.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
+import kotlinx.android.synthetic.main.item_detail.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -341,10 +342,12 @@ class ChatActivity : AppCompatActivity() {
 
             Log.d("클릭 시 comments", comments[position].message.toString())
             Log.d("클릭 시 time", comments[position].time.toString())
+            Log.d("클릭 시 userId", contentDTO[position].userId.toString())
+
             holder.messageItem_textView_message?.textSize = 20F
             holder.messageItem_textView_message?.text = comments[position].message
             holder.messageItem_textView_time?.text = comments[position].time
-//            holder.messageItem_textview_name.text = contentDTO!![position].userId
+//            holder.detailviewitem_profile_textview.text = contentDTO!![position].userId
             if(comments[position].uid.equals(uid)){ // 본인 채팅
                 holder.messageItem_textView_message?.setBackgroundResource(R.drawable.rightbubble)
                 holder.messageItem_textView_message?.visibility = View.VISIBLE

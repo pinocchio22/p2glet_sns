@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.p2glet_sns.ChatActivity
+import com.example.p2glet_sns.ChatActivity2
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -113,11 +114,14 @@ class DetailViewFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
             }
             viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
-//                var intent = Intent(v.context, CommentActivity::class.java)
-//                intent.putExtra("contentUid", contentUidList[position])
+////                var intent = Intent(v.context, CommentActivity::class.java)
+////                intent.putExtra("contentUid", contentUidList[position])
+////                intent.putExtra("destinationUid", contentDTOs[position].uid)
+////                startActivity(intent)
+//                var intent = Intent(v.context, ChatActivity::class.java)
 //                intent.putExtra("destinationUid", contentDTOs[position].uid)
 //                startActivity(intent)
-                var intent = Intent(v.context, ChatActivity::class.java)
+                var intent = Intent(v.context, ChatActivity2::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 startActivity(intent)
             }

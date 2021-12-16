@@ -18,8 +18,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CommentActivity : AppCompatActivity() {
+
     var contentUid : String? = null
     var destinationUid : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
