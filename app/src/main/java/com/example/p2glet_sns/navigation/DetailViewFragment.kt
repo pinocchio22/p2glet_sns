@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.p2glet_sns.ChatActivity
 import com.example.p2glet_sns.ChatActivity2
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO

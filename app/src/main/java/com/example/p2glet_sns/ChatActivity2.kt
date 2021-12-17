@@ -11,20 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.p2glet_sns.navigation.model.AlarmDTO
-import com.example.p2glet_sns.navigation.model.ChatDTO
 import com.example.p2glet_sns.navigation.model.ChatDTO2
-import com.example.p2glet_sns.navigation.model.ContentDTO
-import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_chat2.*
 import kotlinx.android.synthetic.main.activity_chat2.view.*
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_chat2.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
-import kotlinx.android.synthetic.main.item_comment.view.commentviewitem_textview_comment
-import kotlinx.android.synthetic.main.item_comment.view.commentviewitem_textview_profile
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -40,7 +34,7 @@ class ChatActivity2 : AppCompatActivity() {
     var destinationUid : String? = null
     var firestore : FirebaseFirestore? = null
     var comments : ArrayList<ChatDTO2> = arrayListOf()
-//    var uid : String? = null
+    var uid : String? = null
 
 //    init {
 //        firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
@@ -58,7 +52,7 @@ class ChatActivity2 : AppCompatActivity() {
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
         val curTime = dateFormat.format(Date(time))
-//        uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat2)
@@ -136,10 +130,10 @@ class ChatActivity2 : AppCompatActivity() {
                     Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.messageItem_imageview_profile)
                 }
             }
-            Log.d("기준 id", comments[position].uid.toString())
-            Log.d("비교 id 1", contentUid.toString())
-            Log.d("비교 id 2", destinationUid.toString())
-            if (comments[position].uid.equals(destinationUid)){ //본인 채팅
+//            Log.d("기준 id", comments[position].uid.toString())
+//            Log.d("비교 id 1", contentUid.toString())
+//            Log.d("비교 id 2", destinationUid.toString())
+            if (comments[position].uid.equals(uid)){ //본인 채팅
                 view.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
                 view.messageItem_textView_message.visibility = View.VISIBLE
                 view.messageItem_textview_name.visibility = View.VISIBLE

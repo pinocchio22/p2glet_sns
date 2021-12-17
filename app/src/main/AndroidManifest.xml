@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".navigation.CommentActivity"/>
         <activity android:name=".navigation.AddPhotoActivity" />
-        <activity android:name=".ChatActivity" />
         <activity android:name=".ChatActivity2" />
         <activity android:name=".LoginActivity">
             <intent-filter>
