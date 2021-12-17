@@ -2,6 +2,7 @@ package com.example.p2glet_sns
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +40,7 @@ class ChatActivity2 : AppCompatActivity() {
     var destinationUid : String? = null
     var firestore : FirebaseFirestore? = null
     var comments : ArrayList<ChatDTO2> = arrayListOf()
+//    var uid : String? = null
 
 //    init {
 //        firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
@@ -56,6 +58,7 @@ class ChatActivity2 : AppCompatActivity() {
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
         val curTime = dateFormat.format(Date(time))
+//        uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat2)
@@ -118,8 +121,10 @@ class ChatActivity2 : AppCompatActivity() {
         private inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            Log.d("시작id", comments[position].userId.toString())
+//            Log.d("시작id", comments[position].userId.toString())
             var view = holder.itemView
+
+            view.messageItem_textView_message.textSize = 20F
             view.messageItem_textView_message.text = comments[position].message
             view.messageItem_textview_name.text = comments[position].userId
             view.messageItem_textView_time.text = comments[position].timestamp
@@ -130,6 +135,20 @@ class ChatActivity2 : AppCompatActivity() {
                     var url = task.result!!["image"]
                     Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.messageItem_imageview_profile)
                 }
+            }
+            Log.d("기준 id", comments[position].uid.toString())
+            Log.d("비교 id 1", contentUid.toString())
+            Log.d("비교 id 2", destinationUid.toString())
+            if (comments[position].uid.equals(destinationUid)){ //본인 채팅
+                view.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
+                view.messageItem_textView_message.visibility = View.VISIBLE
+                view.messageItem_textview_name.visibility = View.VISIBLE
+                view.messageItem_linearlayout_main.gravity = Gravity.RIGHT
+            }else { //상대방 채팅
+                view.messageItem_layout_destination.visibility = View.VISIBLE
+                view.messageItem_textview_name.visibility = View.VISIBLE
+                view.messageItem_textView_message.setBackgroundResource(R.drawable.leftbubble)
+                view.messageItem_linearlayout_main.gravity = Gravity.LEFT
             }
         }
 

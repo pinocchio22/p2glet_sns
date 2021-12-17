@@ -79,7 +79,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
 
-            android:src="@drawable/messenger_button_send_round_shadow"
+            android:src="@drawable/send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
