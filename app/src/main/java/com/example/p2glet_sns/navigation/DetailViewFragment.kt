@@ -123,6 +123,7 @@ class DetailViewFragment : Fragment() {
 //                startActivity(intent)
                 var intent = Intent(v.context, ChatActivity2::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
+                intent.putExtra("contentUid", contentUidList[position])
                 startActivity(intent)
             }
         }

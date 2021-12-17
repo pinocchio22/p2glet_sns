@@ -1,6 +1,7 @@
 package com.example.p2glet_sns
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_chat2.view.*
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_chat2.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
@@ -36,7 +38,7 @@ class ChatActivity2 : AppCompatActivity() {
     var contentUid : String? = null
     var destinationUid : String? = null
     var firestore : FirebaseFirestore? = null
-    var chatDTO2 : ArrayList<ChatDTO2> = arrayListOf()
+    var comments : ArrayList<ChatDTO2> = arrayListOf()
 
 //    init {
 //        firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
@@ -91,7 +93,6 @@ class ChatActivity2 : AppCompatActivity() {
 //    }
     inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        var comments : ArrayList<ChatDTO2> = arrayListOf()
         init {
             FirebaseFirestore.getInstance()
                     .collection("images")
@@ -117,10 +118,12 @@ class ChatActivity2 : AppCompatActivity() {
         private inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            Log.d("시작id", comments[position].userId.toString())
             var view = holder.itemView
             view.messageItem_textView_message.text = comments[position].message
             view.messageItem_textview_name.text = comments[position].userId
             view.messageItem_textView_time.text = comments[position].timestamp
+//            view.messageActivity_textView_topName.text = comments[position].userId
 
             FirebaseFirestore.getInstance().collection("profileImages").document(comments[position].uid!!).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
