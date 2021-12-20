@@ -115,7 +115,7 @@ class ChatActivity2 : AppCompatActivity() {
 
         private inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
-        @SuppressLint("RtlHardcoded")
+        @SuppressLint("RtlHardcoded")   // RtlHardcoded = 검사중요도
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 //            Log.d("시작id", comments[position].userId.toString())
             var view = holder.itemView
