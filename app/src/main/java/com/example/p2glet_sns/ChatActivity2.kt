@@ -1,5 +1,6 @@
 package com.example.p2glet_sns
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -99,7 +100,7 @@ class ChatActivity2 : AppCompatActivity() {
                     .addSnapshotListener { value, error ->
                         comments.clear()
                         if (value == null) return@addSnapshotListener
-                        for (snapshot in value.documents!!)
+                        for (snapshot in value.documents)
                         {
                             comments.add(snapshot.toObject(ChatDTO2::class.java)!!)
                         }
@@ -114,6 +115,7 @@ class ChatActivity2 : AppCompatActivity() {
 
         private inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
+        @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 //            Log.d("시작id", comments[position].userId.toString())
             var view = holder.itemView
