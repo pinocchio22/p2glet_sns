@@ -1,6 +1,7 @@
 package com.example.p2glet_sns.navigation
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -205,6 +206,9 @@ class UserFragment : Fragment() {
             var width = resources.displayMetrics.widthPixels / 3
             var imageView = ImageView(parent.context)
             imageView.layoutParams = LinearLayoutCompat.LayoutParams(width,width)
+            imageView.setOnClickListener {
+                       // 해당 post 띄워주기
+            }
             return CustomViewHolder(imageView)
         }
 
