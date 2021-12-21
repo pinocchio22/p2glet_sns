@@ -19,7 +19,6 @@ import com.bumptech.glide.GlideContext
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.LoginActivity
 import com.example.p2glet_sns.MainActivity
-import com.example.p2glet_sns.PostActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -209,10 +208,6 @@ class UserFragment : Fragment() {
             var width = resources.displayMetrics.widthPixels / 3
             var imageView = ImageView(parent.context)
             imageView.layoutParams = LinearLayoutCompat.LayoutParams(width,width)
-            imageView.setOnClickListener {
-                var gridFragment = GridFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content,gridFragment).commit()
-            }
             return CustomViewHolder(imageView)
         }
 
@@ -222,6 +217,9 @@ class UserFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var imageView = (holder as CustomViewHolder).imageView
             Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
+            imageView.setOnClickListener {
+
+            }
         }
 
         override fun getItemCount(): Int {
