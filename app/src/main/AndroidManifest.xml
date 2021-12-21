@@ -15,6 +15,7 @@
         <activity android:name=".navigation.CommentActivity"/>
         <activity android:name=".navigation.AddPhotoActivity" />
         <activity android:name=".ChatActivity2" />
+        <activity android:name=".PostActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

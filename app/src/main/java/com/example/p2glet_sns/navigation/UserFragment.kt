@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.bumptech.glide.GlideContext
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.LoginActivity
 import com.example.p2glet_sns.MainActivity
+import com.example.p2glet_sns.PostActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -44,6 +46,7 @@ class UserFragment : Fragment() {
     var uid : String? = null
     var auth : FirebaseAuth? = null
     var currentUserUid : String? = null
+
     companion object {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
@@ -207,13 +210,13 @@ class UserFragment : Fragment() {
             var imageView = ImageView(parent.context)
             imageView.layoutParams = LinearLayoutCompat.LayoutParams(width,width)
             imageView.setOnClickListener {
-                       // 해당 post 띄워주기
+                var gridFragment = GridFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.main_content,gridFragment).commit()
             }
             return CustomViewHolder(imageView)
         }
 
         inner class CustomViewHolder(var imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
-
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
