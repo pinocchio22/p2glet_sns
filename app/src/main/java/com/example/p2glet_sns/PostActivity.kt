@@ -47,8 +47,9 @@ class PostActivity : AppCompatActivity() {
 //        var uid = intent.getStringExtra("destinationUid")
         init {
 //            Log.d("널", uid.toString())
-            firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
+            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
                 //Somtimes, This code return null of querySnapshot when it signout
+                contentDTOs.clear()
                 if (querySnapshot == null) return@addSnapshotListener
 
                 //Get data
