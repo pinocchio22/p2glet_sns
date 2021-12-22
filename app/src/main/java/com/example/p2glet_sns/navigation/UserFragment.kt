@@ -1,5 +1,6 @@
 package com.example.p2glet_sns.navigation
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.LoginActivity
 import com.example.p2glet_sns.MainActivity
@@ -23,10 +25,10 @@ import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.model.FollowDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
-import com.example.p2glet_sns.navigation.util.PostFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import java.util.*
 
@@ -43,11 +45,13 @@ class UserFragment : Fragment() {
     var uid : String? = null
     var auth : FirebaseAuth? = null
     var currentUserUid : String? = null
+    var requestManager : RequestManager? = null
 
     companion object {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        arrayListOf<ContentDTO>()
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user, container, false)
         uid = arguments?.getString("destinationUid")
         firestore = FirebaseFirestore.getInstance()
@@ -104,9 +108,12 @@ class UserFragment : Fragment() {
                     fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
                     fragmentView?.account_btn_follow_signout?.background?.setColorFilter(ContextCompat.getColor(requireActivity(), R.color.colorLightGray), PorterDuff.Mode.MULTIPLY)
                 }else {
-                    if (uid != currentUserUid) {
-                        fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
-                        fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
+                    if (context == null){
+                    }else{
+                        if (uid != currentUserUid) {
+                            fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
+                            fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
+                        }
                     }
                 }
             }
@@ -182,14 +189,15 @@ class UserFragment : Fragment() {
             if (documentSnapshot == null) return@addSnapshotListener
             if (documentSnapshot.data != null) {
                 var url = documentSnapshot?.data!!["image"]
-                Log.d("액티비티", activity.toString())
-                Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile)
+//                Log.d("액티비티", requireContext().toString())
+//                requestManager?.load(url)?.apply(RequestOptions().circleCrop())?.into(fragmentView?.account_iv_profile)
+                requestManager?.load(url)?.apply(RequestOptions().circleCrop())?.into(fragmentView?.account_iv_profile)
             }
         }
     }
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-       var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         init {
             firestore?.collection("images")?.whereEqualTo("uid", uid)?.addSnapshotListener { querySnapshot, firebaseFirestore ->
                 //Somtimes, This code return null of querySnapshot when it signout
