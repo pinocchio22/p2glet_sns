@@ -90,11 +90,16 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 class PostActivity : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
-    var uid = FirebaseAuth.getInstance().currentUser?.uid
+    var uid : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        uid = intent.getStringExtra("userId")
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
+
+        Log.d("유저", uid.toString())
 
         firestore = FirebaseFirestore.getInstance()
 

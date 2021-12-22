@@ -3,6 +3,7 @@ package com.example.p2glet_sns.navigation
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -181,7 +182,8 @@ class UserFragment : Fragment() {
             if (documentSnapshot == null) return@addSnapshotListener
             if (documentSnapshot.data != null) {
                 var url = documentSnapshot?.data!!["image"]
-                Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile)
+                Log.d("액티비티", activity.toString())
+                Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile)
             }
         }
     }
@@ -216,6 +218,8 @@ class UserFragment : Fragment() {
             Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
             holder.imageView.setOnClickListener {
                 var intent = Intent(context, PostActivity::class.java)
+                intent.putExtra("userId", uid)
+                Log.d("유저1", intent.hasExtra("userId").toString())
                 startActivity(intent)
             }
         }
