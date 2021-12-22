@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,9 @@ import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.model.FollowDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
+import com.facebook.all.All
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.core.RepoManager.clear
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -45,13 +48,12 @@ class UserFragment : Fragment() {
     var uid : String? = null
     var auth : FirebaseAuth? = null
     var currentUserUid : String? = null
-    var requestManager : RequestManager? = null
 
     companion object {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        arrayListOf<ContentDTO>()
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user, container, false)
         uid = arguments?.getString("destinationUid")
         firestore = FirebaseFirestore.getInstance()
@@ -190,8 +192,7 @@ class UserFragment : Fragment() {
             if (documentSnapshot.data != null) {
                 var url = documentSnapshot?.data!!["image"]
 //                Log.d("액티비티", requireContext().toString())
-//                requestManager?.load(url)?.apply(RequestOptions().circleCrop())?.into(fragmentView?.account_iv_profile)
-                requestManager?.load(url)?.apply(RequestOptions().circleCrop())?.into(fragmentView?.account_iv_profile)
+                Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile)
             }
         }
     }
@@ -202,10 +203,9 @@ class UserFragment : Fragment() {
             firestore?.collection("images")?.whereEqualTo("uid", uid)?.addSnapshotListener { querySnapshot, firebaseFirestore ->
                 //Somtimes, This code return null of querySnapshot when it signout
                 if (querySnapshot == null) return@addSnapshotListener
-
                 //Get data
-                for (snapshot in querySnapshot.documents) {
-                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
+                    for (snapshot in querySnapshot.documents) {
+                        contentDTOs.add(snapshot?.toObject(ContentDTO::class.java)!!)
                 }
                 fragmentView?.account_tv_post_count?.text = contentDTOs.size.toString()
                 notifyDataSetChanged()
@@ -227,7 +227,7 @@ class UserFragment : Fragment() {
             holder.imageView.setOnClickListener {
                 var intent = Intent(context, PostActivity::class.java)
                 intent.putExtra("userId", uid)
-                Log.d("유저1", intent.hasExtra("userId").toString())
+//                Log.d("유저1", intent.hasExtra("userId").toString())
                 startActivity(intent)
             }
         }
@@ -235,6 +235,5 @@ class UserFragment : Fragment() {
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
-
     }
 }

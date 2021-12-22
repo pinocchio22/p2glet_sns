@@ -27,6 +27,12 @@ import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
+import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_comment_imageview
+import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_explain_textview
+import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favorite_imageview
+import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoritecounter_textview
+import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
+import kotlinx.android.synthetic.main.item_post.view.*
 
 /**
  * @author CHOI
@@ -130,7 +136,7 @@ class PostActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail, parent, false)
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
             return CustomViewHolder(view)
         }
 
@@ -146,7 +152,7 @@ class PostActivity : AppCompatActivity() {
             var viewholder = (holder as CustomViewHolder).itemView
 
             //UserId
-            viewholder.detailviewitem_profile_textview.text = contentDTOs!![position].userId
+            viewholder.toolbar_username.text = contentDTOs!![position].userId
 
             //Image
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_imageview_content)
@@ -173,23 +179,26 @@ class PostActivity : AppCompatActivity() {
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
             //This code is when the profile image is clicked
-            viewholder.detailviewitem_profile_image.setOnClickListener {
-//                var fragment = UserFragment()
-//                var bundle = Bundle()
-//                bundle.putString("destinationUid", contentDTOs[position].uid)
-//                bundle.putString("userId", contentDTOs[position].userId)
-//                fragment.arguments = bundle
-//                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
-                var intent = Intent(this@PostActivity, UserFragment::class.java)
-                intent.putExtra("destinationUid", contentDTOs[position].uid)
-                intent.putExtra("userId", contentDTOs[position].userId)
-                startActivityForResult(intent, 201)
-            }
+//            viewholder.detailviewitem_profile_image.setOnClickListener {
+////                var fragment = UserFragment()
+////                var bundle = Bundle()
+////                bundle.putString("destinationUid", contentDTOs[position].uid)
+////                bundle.putString("userId", contentDTOs[position].userId)
+////                fragment.arguments = bundle
+////                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
+//                var intent = Intent(this@PostActivity, UserFragment::class.java)
+//                intent.putExtra("destinationUid", contentDTOs[position].uid)
+//                intent.putExtra("userId", contentDTOs[position].userId)
+//                startActivityForResult(intent, 201)
+//            }
             viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
                 var intent = Intent(v.context, ChatActivity2::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 intent.putExtra("contentUid", contentUidList[position])
                 startActivity(intent)
+            }
+            viewholder.toolbar_btn_back.setOnClickListener {
+                onBackPressed()
             }
         }
         fun favoriteEvent(position: Int) {
