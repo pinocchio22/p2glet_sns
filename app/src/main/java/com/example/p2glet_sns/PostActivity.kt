@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_explain_te
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favorite_imageview
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoritecounter_textview
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
+import kotlinx.android.synthetic.main.item_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -154,6 +155,12 @@ class PostActivity : AppCompatActivity() {
 //            getDoc(position)
 
             var viewholder = (holder as CustomViewHolder).itemView
+
+            if (uid == FirebaseAuth.getInstance().currentUser?.uid) {
+                viewholder.toolbar_delete.visibility = View.VISIBLE
+            }else{
+                viewholder.toolbar_delete.visibility = View.GONE
+            }
 
             //UserId
             viewholder.toolbar_username.text = contentDTOs!![position].userId
