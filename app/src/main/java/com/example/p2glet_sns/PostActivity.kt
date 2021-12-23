@@ -1,27 +1,26 @@
 package com.example.p2glet_sns
 
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.example.p2glet_sns.navigation.UserFragment
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -33,6 +32,8 @@ import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favorite_i
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoritecounter_textview
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
 import kotlinx.android.synthetic.main.item_post.view.*
+import java.util.*
+
 
 /**
  * @author CHOI
@@ -95,8 +96,9 @@ import kotlinx.android.synthetic.main.item_post.view.*
 //}
 class PostActivity : AppCompatActivity() {
 
-    var firestore : FirebaseFirestore? = null
-    var uid : String? = null
+    var firestore: FirebaseFirestore? = null
+    var uid: String? = null
+    val getDocumentID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -114,10 +116,11 @@ class PostActivity : AppCompatActivity() {
     }
 
     inner class PostRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
-        var contentUidList : ArrayList<String> = arrayListOf()
+        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
+        var contentUidList: ArrayList<String> = arrayListOf()
 
         init {
+//            getDoc()
 
             firestore?.collection("images")?.orderBy("timestamp")?.whereEqualTo("uid", uid)?.addSnapshotListener { querySnapshot, firebaseFirestore ->
                 contentDTOs.clear()
@@ -126,7 +129,7 @@ class PostActivity : AppCompatActivity() {
                 //Sometimes, This code return null of querySnapshot when it sign-out
                 if (querySnapshot == null) return@addSnapshotListener
 
-                for(snapshot in querySnapshot!!.documents) {
+                for (snapshot in querySnapshot!!.documents) {
                     var item = snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
                     contentUidList.add(snapshot.id)
@@ -149,6 +152,9 @@ class PostActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+//            Log.d("유알엘", (getDocumentID.toString()))
+//            Log.d("document", firestore?.collection("images")?.document(getDocumentID!!).toString())
+
             var viewholder = (holder as CustomViewHolder).itemView
 
             //UserId
@@ -171,10 +177,10 @@ class PostActivity : AppCompatActivity() {
                 favoriteEvent(position)
             }
             //This code is when the page is loaded
-            if (contentDTOs!![position].favorites.containsKey(uid)){
+            if (contentDTOs!![position].favorites.containsKey(uid)) {
                 //This is like status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
-            }else {
+            } else {
                 //This is unlike status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
@@ -200,18 +206,30 @@ class PostActivity : AppCompatActivity() {
             viewholder.toolbar_btn_back.setOnClickListener {
                 onBackPressed()
             }
+            viewholder.toolbar_delete.setOnClickListener {
+                firestore?.collection("images")?.document(getDocumentID!!)?.delete()?.addOnSuccessListener {
+                    Log.d("삭제 성공", contentDTOs[position].imageUrl.toString())
+                    onBackPressed()
+                }?.addOnFailureListener {
+                    Log.d("삭제 실패", contentDTOs[position].imageUrl.toString())
+                }
+            }
         }
+
+        fun deletePost(position: Int) {
+        }
+
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
-            firestore?.runTransaction{ transaction ->
+            firestore?.runTransaction { transaction ->
 
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
 
-                if (contentDTO!!.favorites.containsKey(uid)){
+                if (contentDTO!!.favorites.containsKey(uid)) {
                     //when the button is clicked
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount - 1
                     contentDTO?.favorites.remove(uid)
-                }else {
+                } else {
                     //when the button is not clicked
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
                     contentDTO?.favorites[uid!!] = true
@@ -221,7 +239,7 @@ class PostActivity : AppCompatActivity() {
             }
         }
 
-        fun favoriteAlarm (destinationUid : String) {
+        fun favoriteAlarm(destinationUid: String) {
             var alarmDTO = AlarmDTO()
             alarmDTO.destinationUid = destinationUid
             alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
@@ -234,4 +252,19 @@ class PostActivity : AppCompatActivity() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
+
+//    fun getDoc() {
+//        firestore?.collection("Images")?.document(uid!!)?.collection()?.get()?.addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+//            if (task.isSuccessful) {
+//                val document: DocumentSnapshot = task.getResult()
+//                if (document.exists()) {
+//                    Log.d(TAG, "DocumentSnapshot data: " + document.data)
+//                } else {
+//                    Log.d(TAG, "No such document")
+//                }
+//            } else {
+//                Log.d(TAG, "get failed with ", task.exception)
+//            }
+//        })
+//    }
 }
