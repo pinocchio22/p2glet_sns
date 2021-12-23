@@ -26,11 +26,11 @@
                 android:textColor="@color/colorNavIcon"
                 android:gravity="center"
                 android:layout_toRightOf="@+id/toolbar_btn_back"/>
-            <ImageView
+            <Button
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/trash"
+                android:background="@drawable/trash"
                 android:id="@+id/toolbar_delete"/>
 
         </RelativeLayout>

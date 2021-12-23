@@ -2,12 +2,14 @@ package com.example.p2glet_sns
 
 
 import android.content.ContentValues.TAG
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -212,17 +214,37 @@ class PostActivity : AppCompatActivity() {
                 onBackPressed()
             }
             viewholder.toolbar_delete.setOnClickListener {
-                firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {}
-                firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
-//                    Log.d("삭제 성공", contentDTOs[position].imageUrl.toString())
-                    intent = Intent(this@PostActivity, PostActivity::class.java)
-                    startActivity(intent)
-                }?.addOnFailureListener {
-//                    Log.d("삭제 실패", contentDTOs[position].imageUrl.toString())
+                var builder = AlertDialog.Builder(this@PostActivity)
+                builder.setTitle("삭제 하시겠습니까?")
+                builder.setMessage("확인 버튼을 누르면 해당 게시물이 삭제됩니다.")
+
+                var listener = object  : DialogInterface.OnClickListener {
+                    override fun onClick(p0: DialogInterface?, p1: Int) {
+                        when(p1) {
+                            DialogInterface.BUTTON_POSITIVE ->
+                                deletePost(position)
+                            DialogInterface.BUTTON_NEGATIVE ->
+                                finish()
+                        }
+                    }
                 }
+
+                builder.setPositiveButton("확인", listener)
+                builder.setNegativeButton("취소", listener)
+                builder.show()
             }
         }
 
+        fun deletePost(position: Int){
+            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {}
+            firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
+//                    Log.d("삭제 성공", contentDTOs[position].imageUrl.toString())
+                intent = Intent(this@PostActivity, PostActivity::class.java)
+                startActivity(intent)
+            }?.addOnFailureListener {
+//                    Log.d("삭제 실패", contentDTOs[position].imageUrl.toString())
+            }
+        }
 
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
