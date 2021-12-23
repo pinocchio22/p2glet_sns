@@ -13,6 +13,8 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -235,5 +237,16 @@ class UserFragment : Fragment() {
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        refreshFragment(this, requireFragmentManager())
+    }
+
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.detach(fragment).attach(fragment).commit()
     }
 }

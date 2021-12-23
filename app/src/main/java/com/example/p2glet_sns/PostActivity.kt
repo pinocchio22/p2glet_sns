@@ -11,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -101,7 +104,7 @@ class PostActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
     var uid: String? = null
-    var documentId : MutableList<String> = mutableListOf()
+    var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -117,7 +120,6 @@ class PostActivity : AppCompatActivity() {
     }
 
     inner class PostRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
         var contentUidList: ArrayList<String> = arrayListOf()
 
         init {
@@ -151,10 +153,6 @@ class PostActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            Log.d("유알엘", (documentId.toString()))
-            Log.d("포지션",position.toString())
-//            Log.d("document", getDoc().toString())
-//            getDoc(position)
 
             var viewholder = (holder as CustomViewHolder).itemView
 
@@ -191,28 +189,21 @@ class PostActivity : AppCompatActivity() {
                 //This is unlike status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
-            //This code is when the profile image is clicked
-//            viewholder.detailviewitem_profile_image.setOnClickListener {
-////                var fragment = UserFragment()
-////                var bundle = Bundle()
-////                bundle.putString("destinationUid", contentDTOs[position].uid)
-////                bundle.putString("userId", contentDTOs[position].userId)
-////                fragment.arguments = bundle
-////                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
-//                var intent = Intent(this@PostActivity, UserFragment::class.java)
-//                intent.putExtra("destinationUid", contentDTOs[position].uid)
-//                intent.putExtra("userId", contentDTOs[position].userId)
-//                startActivityForResult(intent, 201)
-//            }
+
+            //This is chat
             viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
                 var intent = Intent(v.context, ChatActivity2::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 intent.putExtra("contentUid", contentUidList[position])
                 startActivity(intent)
             }
+
+            //This is back button
             viewholder.toolbar_btn_back.setOnClickListener {
                 onBackPressed()
             }
+
+            //This is delete button
             viewholder.toolbar_delete.setOnClickListener {
                 var builder = AlertDialog.Builder(this@PostActivity)
                 builder.setTitle("삭제 하시겠습니까?")
@@ -228,21 +219,18 @@ class PostActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 builder.setPositiveButton("확인", listener)
                 builder.setNegativeButton("취소", listener)
                 builder.show()
+                notifyDataSetChanged()
             }
         }
 
         fun deletePost(position: Int){
             firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {}
             firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
-//                    Log.d("삭제 성공", contentDTOs[position].imageUrl.toString())
-                intent = Intent(this@PostActivity, PostActivity::class.java)
-                startActivity(intent)
+                finish()
             }?.addOnFailureListener {
-//                    Log.d("삭제 실패", contentDTOs[position].imageUrl.toString())
             }
         }
 
@@ -280,13 +268,4 @@ class PostActivity : AppCompatActivity() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
-
-//    fun getDoc(position: Int) {
-//        firestore?.collection("images")?.get()?.addOnSuccessListener { task ->
-//            for (document in task) {
-//                documentId[position] = document.id
-//                Log.d("도큐", documentId[position])
-//            }
-//        }
-//    }
 }
