@@ -12,13 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.p2glet_sns.navigation.UserFragment
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_post.*
@@ -33,6 +32,7 @@ import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoriteco
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
 import kotlinx.android.synthetic.main.item_post.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -98,7 +98,7 @@ class PostActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
     var uid: String? = null
-    val getDocumentID: String? = null
+    var documentId : MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -106,8 +106,6 @@ class PostActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
-
-        Log.d("유저", uid.toString())
 
         firestore = FirebaseFirestore.getInstance()
 
@@ -120,8 +118,6 @@ class PostActivity : AppCompatActivity() {
         var contentUidList: ArrayList<String> = arrayListOf()
 
         init {
-//            getDoc()
-
             firestore?.collection("images")?.orderBy("timestamp")?.whereEqualTo("uid", uid)?.addSnapshotListener { querySnapshot, firebaseFirestore ->
                 contentDTOs.clear()
                 contentUidList.clear()
@@ -152,8 +148,10 @@ class PostActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//            Log.d("유알엘", (getDocumentID.toString()))
-//            Log.d("document", firestore?.collection("images")?.document(getDocumentID!!).toString())
+            Log.d("유알엘", (documentId.toString()))
+            Log.d("포지션",position.toString())
+//            Log.d("document", getDoc().toString())
+//            getDoc(position)
 
             var viewholder = (holder as CustomViewHolder).itemView
 
@@ -207,23 +205,24 @@ class PostActivity : AppCompatActivity() {
                 onBackPressed()
             }
             viewholder.toolbar_delete.setOnClickListener {
-                firestore?.collection("images")?.document(getDocumentID!!)?.delete()?.addOnSuccessListener {
-                    Log.d("삭제 성공", contentDTOs[position].imageUrl.toString())
-                    onBackPressed()
+                firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {}
+                firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
+//                    Log.d("삭제 성공", contentDTOs[position].imageUrl.toString())
+                    intent = Intent(this@PostActivity, PostActivity::class.java)
+                    startActivity(intent)
                 }?.addOnFailureListener {
-                    Log.d("삭제 실패", contentDTOs[position].imageUrl.toString())
+//                    Log.d("삭제 실패", contentDTOs[position].imageUrl.toString())
                 }
             }
         }
 
-        fun deletePost(position: Int) {
-        }
 
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction { transaction ->
 
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+                Log.d("콘텐", contentDTO.toString())
 
                 if (contentDTO!!.favorites.containsKey(uid)) {
                     //when the button is clicked
@@ -253,18 +252,12 @@ class PostActivity : AppCompatActivity() {
         }
     }
 
-//    fun getDoc() {
-//        firestore?.collection("Images")?.document(uid!!)?.collection()?.get()?.addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-//            if (task.isSuccessful) {
-//                val document: DocumentSnapshot = task.getResult()
-//                if (document.exists()) {
-//                    Log.d(TAG, "DocumentSnapshot data: " + document.data)
-//                } else {
-//                    Log.d(TAG, "No such document")
-//                }
-//            } else {
-//                Log.d(TAG, "get failed with ", task.exception)
+//    fun getDoc(position: Int) {
+//        firestore?.collection("images")?.get()?.addOnSuccessListener { task ->
+//            for (document in task) {
+//                documentId[position] = document.id
+//                Log.d("도큐", documentId[position])
 //            }
-//        })
+//        }
 //    }
 }
