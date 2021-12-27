@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -17,6 +18,7 @@ import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_add_photo.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.thread
 
 class AddPhotoActivity : AppCompatActivity() {
 
@@ -39,9 +41,22 @@ class AddPhotoActivity : AppCompatActivity() {
         photoPickerIntent.type = "image/*"
         startActivityForResult(photoPickerIntent, PICK_IMAGE_FROM_ALBUM)
 
+        //set progressbar
+        showProgress(false)
+
         //add image upload event
         addphoto_btn_upload.setOnClickListener {
             contentUpload()
+            showProgress(true)
+
+            thread(true) {
+                Thread.sleep(3000)
+
+                runOnUiThread {
+                    showProgress(false)
+                    finish()
+                }
+            }
         }
     }
 
@@ -92,9 +107,8 @@ class AddPhotoActivity : AppCompatActivity() {
 
             setResult(Activity.RESULT_OK)
 
-            finish()
+//            finish()
         }
-
 //        //Callback method
 //        storageRef?.putFile(photoUri!!)?.addOnSuccessListener {
 //            storageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -122,5 +136,10 @@ class AddPhotoActivity : AppCompatActivity() {
 //                finish()
 //            }
 //        }
+    }
+
+    fun showProgress(isShow : Boolean) {
+        if (isShow) upload_progress.visibility = View.VISIBLE
+        else upload_progress.visibility  = View.GONE
     }
 }
