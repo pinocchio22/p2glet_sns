@@ -51,4 +51,17 @@
         android:layout_below="@id/editText"
         android:theme="@style/ButtonStyle"
         android:text="Upload Photo" />
+
+    <ProgressBar
+        android:id="@+id/upload_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="올리는중.."
+        android:layout_centerInParent="true"
+        android:layout_below="@id/upload_progress"/>
+
 </RelativeLayout>

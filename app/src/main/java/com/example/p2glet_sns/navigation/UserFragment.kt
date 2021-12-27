@@ -1,24 +1,21 @@
 package com.example.p2glet_sns.navigation
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.LoginActivity
 import com.example.p2glet_sns.MainActivity
@@ -28,14 +25,13 @@ import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.model.FollowDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
-import com.facebook.all.All
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.core.RepoManager.clear
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import java.util.*
+
 
 /**
  * @author CHOI
@@ -242,7 +238,13 @@ class UserFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        refreshFragment(this, requireFragmentManager())
+        //Test 필요
+//        refreshFragment(this, requireFragmentManager())
+//        val ft = requireFragmentManager().beginTransaction()
+//        if (Build.VERSION.SDK_INT >= 26) {
+//            ft.setReorderingAllowed(false)
+//        }
+//        ft.detach(this).attach(this).commit()
     }
 
     fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
