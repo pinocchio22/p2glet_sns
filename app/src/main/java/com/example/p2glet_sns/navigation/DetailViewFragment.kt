@@ -17,6 +17,8 @@ import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_add_photo.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
@@ -31,10 +33,6 @@ class DetailViewFragment : Fragment() {
 
     var firestore : FirebaseFirestore? = null
     var uid : String? = null
-
-//    init {
-//        DetailViewRecyclerViewAdapter().notifyDataSetChanged()
-//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
@@ -174,4 +172,12 @@ class DetailViewFragment : Fragment() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
+
+//    fun showEmpty(isShow: Boolean) {
+//        if (isShow) {
+//            empty_txt.visibility = View.VISIBLE
+//        } else {
+//            empty_txt.visibility = View.GONE
+//        }
+//    }
 }

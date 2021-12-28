@@ -51,6 +51,11 @@ class UserFragment : Fragment() {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
 
+    init {
+        if (account_recyclerview !== null) account_recyclerview.removeAllViews()
+        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user, container, false)
         uid = arguments?.getString("destinationUid")
@@ -84,6 +89,7 @@ class UserFragment : Fragment() {
         }
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
+        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
 
         fragmentView?.account_iv_profile?.setOnClickListener {
             var photoPickerIntent = Intent(Intent.ACTION_PICK)

@@ -23,7 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:id="@+id/detailviewitem_imageview_content"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="게시물 없음 ㅠ.ㅠ"-->
+<!--        android:layout_gravity="center"/>-->
     <LinearLayout
         android:layout_marginLeft="8dp"
         android:gravity="center_vertical"
