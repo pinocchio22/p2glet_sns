@@ -1,6 +1,7 @@
 package com.example.p2glet_sns.navigation
 
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
@@ -29,6 +31,11 @@ class DetailViewFragment : Fragment() {
 
     var firestore : FirebaseFirestore? = null
     var uid : String? = null
+
+//    init {
+//        DetailViewRecyclerViewAdapter().notifyDataSetChanged()
+//    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
         firestore = FirebaseFirestore.getInstance()
@@ -36,14 +43,22 @@ class DetailViewFragment : Fragment() {
 
         view.detailviewfragment_recyclerview.adapter = DetailViewRecyclerViewAdapter()
         view.detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
+//        DetailViewRecyclerViewAdapter().notifyDataSetChanged()
         return view
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        view?.detailviewfragment_recyclerview?.removeAllViewsInLayout()
+//        view?.detailviewfragment_recyclerview?.adapter = DetailViewRecyclerViewAdapter()
+//    }
+
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUidList : ArrayList<String> = arrayListOf()
 
         init {
-
+            view?.detailviewfragment_recyclerview?.removeAllViews()
             firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener{ querySnapshot, firebaseFirestoreException ->
                 contentDTOs.clear()
                 contentUidList.clear()
@@ -112,7 +127,7 @@ class DetailViewFragment : Fragment() {
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
             }
-            viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
+            viewholder.detailviewitem_comment_imageview.setOnClickListener() { v ->
 ////                var intent = Intent(v.context, CommentActivity::class.java)
 ////                intent.putExtra("contentUid", contentUidList[position])
 ////                intent.putExtra("destinationUid", contentDTOs[position].uid)

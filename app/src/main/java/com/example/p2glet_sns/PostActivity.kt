@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.p2glet_sns.navigation.DetailViewFragment
 import com.example.p2glet_sns.navigation.UserFragment
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -26,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
@@ -222,7 +224,6 @@ class PostActivity : AppCompatActivity() {
                 builder.setPositiveButton("확인", listener)
                 builder.setNegativeButton("취소", listener)
                 builder.show()
-                notifyDataSetChanged()
             }
         }
 
@@ -230,6 +231,7 @@ class PostActivity : AppCompatActivity() {
             firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {}
             firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
                 finish()
+                notifyDataSetChanged()
             }?.addOnFailureListener {
             }
         }
@@ -268,4 +270,9 @@ class PostActivity : AppCompatActivity() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        detailviewfragment_recyclerview.removeAllViews()
+//    }
 }

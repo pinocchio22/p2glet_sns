@@ -3,19 +3,18 @@ package com.example.p2glet_sns.navigation
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
-import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_add_photo.*
+import kotlinx.android.synthetic.main.fragment_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
@@ -83,7 +82,7 @@ class AddPhotoActivity : AppCompatActivity() {
         var storageRef = storage?.reference?.child("images")?.child(imageFileName)
 
         //Promise method
-        storageRef?.putFile(photoUri!!)?.continueWithTask { task : Task<UploadTask.TaskSnapshot> ->
+        storageRef?.putFile(photoUri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener { uri ->
             var contentDTO = ContentDTO()
@@ -138,8 +137,13 @@ class AddPhotoActivity : AppCompatActivity() {
 //        }
     }
 
-    fun showProgress(isShow : Boolean) {
-        if (isShow) upload_progress.visibility = View.VISIBLE
-        else upload_progress.visibility  = View.GONE
+    fun showProgress(isShow: Boolean) {
+        if (isShow) {
+            upload_progress.visibility = View.VISIBLE
+            upload_progress_txt.visibility = View.VISIBLE
+        } else {
+            upload_progress.visibility  = View.GONE
+            upload_progress_txt.visibility = View.GONE
+        }
     }
 }
