@@ -25,12 +25,15 @@ import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.model.FollowDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
+import com.google.common.collect.Iterables.addAll
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import java.util.*
+import java.util.Collections.addAll
+import kotlin.collections.ArrayList
 
 
 /**
@@ -51,10 +54,10 @@ class UserFragment : Fragment() {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
 
-    init {
-        if (account_recyclerview !== null) account_recyclerview.removeAllViews()
-        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
-    }
+//    init {
+//        if (account_recyclerview !== null) account_recyclerview.removeAllViews()
+//        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
+//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user, container, false)
@@ -62,6 +65,7 @@ class UserFragment : Fragment() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         currentUserUid = auth?.currentUser?.uid
+
 
         if (uid == currentUserUid) {
             //MyPage
@@ -100,6 +104,15 @@ class UserFragment : Fragment() {
         getFollowerAndFollowing()
         return fragmentView
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        var contentDTO2 : ArrayList<ContentDTO> = arrayListOf()
+//        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+//        contentDTOs.clear()
+//        contentDTOs.addAll(contentDTO2)
+//        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
+//    }
 
     fun getFollowerAndFollowing() {
         firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { value, error ->
@@ -242,7 +255,11 @@ class UserFragment : Fragment() {
     }
 
     override fun onResume() {
+        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+
         super.onResume()
+
+        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
 
         //Test 필요
 //        refreshFragment(this, requireFragmentManager())

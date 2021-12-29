@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.ChatActivity2
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_add_photo.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
+import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
 /**
@@ -103,6 +105,14 @@ class DetailViewFragment : Fragment() {
 
 //            //ProfileImage
 //            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
+            firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                if (documentSnapshot == null) return@addSnapshotListener
+                if (documentSnapshot.data != null) {
+                    var url = documentSnapshot?.data!!["image"]
+//                Log.d("액티비티", requireContext().toString())
+                    Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
+                }
+            }
 
             //This code is when the button is clicked
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {

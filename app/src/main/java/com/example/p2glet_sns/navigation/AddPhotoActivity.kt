@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2glet_sns.MainActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.google.android.gms.tasks.Task
@@ -106,7 +108,7 @@ class AddPhotoActivity : AppCompatActivity() {
 
             setResult(Activity.RESULT_OK)
 
-//            finish()
+            finish()
         }
 //        //Callback method
 //        storageRef?.putFile(photoUri!!)?.addOnSuccessListener {
