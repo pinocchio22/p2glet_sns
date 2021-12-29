@@ -1,7 +1,6 @@
 package com.example.p2glet_sns.navigation
 
 import android.os.Bundle
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_alarm.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
+import kotlinx.android.synthetic.main.item_post.view.*
 
 /**
  * @author CHOI
@@ -24,18 +24,19 @@ import kotlinx.android.synthetic.main.item_comment.view.*
  * @desc
  */
 class AlarmFragment : Fragment() {
-
+    var dialog = DeleteDialogFragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_alarm,container,false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_alarm, container, false)
 
         view.alarmfragment_recyclerview.adapter = AlarmRecyclerviewAdapter()
         view.alarmfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
 
         return view
     }
+
     inner class AlarmRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        var alarmDTOList : ArrayList<AlarmDTO> = arrayListOf()
+        var alarmDTOList: ArrayList<AlarmDTO> = arrayListOf()
 
         init {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -49,44 +50,50 @@ class AlarmFragment : Fragment() {
                 notifyDataSetChanged()
             }
         }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment,parent,false)
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
 
             return CustomViewHolder(view)
         }
 
-        inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
+        inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view) {  //메모리 효율성 증가
+        }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            var view = holder.itemView
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                var viewholder = (holder as CustomViewHolder).itemView
 
-            FirebaseFirestore.getInstance().collection("profileImages").document(alarmDTOList[position].uid!!).get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val url = task.result!!["image"]
-                    Glide.with(view.context).load(url).apply(RequestOptions().circleCrop()).into(view.commentviewitem_imageview_profile)
+                FirebaseFirestore.getInstance().collection("profileImages").document(alarmDTOList[position].uid!!).get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val url = task.result!!["image"]
+                        Glide.with(viewholder.context).load(url).apply(RequestOptions().circleCrop()).into(viewholder.commentviewitem_imageview_profile)
+                    }
+                }
+
+                when (alarmDTOList[position].kind) {
+                    0 -> {
+                        val str_0 = alarmDTOList[position].userId + getString(R.string.alarm_favorite)
+                        viewholder.commentviewitem_textview_profile.text = str_0
+                    }
+                    1 -> {
+                        val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + " of " + alarmDTOList[position].message
+                        viewholder.commentviewitem_textview_profile.text = str_0
+                    }
+                    2 -> {
+                        val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_follow)
+                        viewholder.commentviewitem_textview_profile.text = str_0
+                    }
+                }
+                viewholder.commentviewitem_textview_comment.visibility = View.INVISIBLE
+
+                viewholder.alarm_clear.setOnClickListener {
+
+                    dialog.show(activity!!.supportFragmentManager, "DeleteDialogFragment")
                 }
             }
 
-            when(alarmDTOList[position].kind) {
-                0 -> {
-                    val str_0 = alarmDTOList[position].userId + getString(R.string.alarm_favorite)
-                    view.commentviewitem_textview_profile.text = str_0
-                }
-                1 -> {
-                    val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + " of " + alarmDTOList[position].message
-                    view.commentviewitem_textview_profile.text = str_0
-                }
-                2 -> {
-                    val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_follow)
-                    view.commentviewitem_textview_profile.text = str_0
-                }
+            override fun getItemCount(): Int {
+                return alarmDTOList.size
             }
-            view.commentviewitem_textview_comment.visibility = View.INVISIBLE
-        }
-
-        override fun getItemCount(): Int {
-            return alarmDTOList.size
-        }
-
     }
 }
