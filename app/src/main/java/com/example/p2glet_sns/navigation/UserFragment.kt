@@ -1,6 +1,8 @@
 package com.example.p2glet_sns.navigation
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -232,8 +235,10 @@ class UserFragment : Fragment() {
             var width = resources.displayMetrics.widthPixels / 3
             var imageView = ImageView(parent.context)
             imageView.layoutParams = LinearLayoutCompat.LayoutParams(width, width)
+            imageView.setBackgroundResource(R.drawable.item_border)
             return CustomViewHolder(imageView)
         }
+
 
         inner class CustomViewHolder(var imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
         }
