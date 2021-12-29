@@ -24,12 +24,16 @@ import kotlinx.android.synthetic.main.item_post.view.*
  * @desc
  */
 class AlarmFragment : Fragment() {
-    var dialog = DeleteDialogFragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        var dialog = DeleteDialogFragment()
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_alarm, container, false)
 
         view.alarmfragment_recyclerview.adapter = AlarmRecyclerviewAdapter()
         view.alarmfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
+
+        view.alarm_clear.setOnClickListener {
+            dialog.show(requireActivity().supportFragmentManager, "DeleteDialogFragment")
+        }
 
         return view
     }
@@ -85,11 +89,6 @@ class AlarmFragment : Fragment() {
                     }
                 }
                 viewholder.commentviewitem_textview_comment.visibility = View.INVISIBLE
-
-                viewholder.alarm_clear.setOnClickListener {
-
-                    dialog.show(activity!!.supportFragmentManager, "DeleteDialogFragment")
-                }
             }
 
             override fun getItemCount(): Int {
