@@ -60,7 +60,6 @@ class DeleteDialogFragment : DialogFragment() {
     fun deletePost(){
         firestore?.collection("alarm")?.document(uid!!)?.delete()
                 ?.addOnSuccessListener {
-
                 }
                 ?.addOnFailureListener {
         }
