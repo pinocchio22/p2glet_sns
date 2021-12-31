@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,12 @@ import kotlinx.android.synthetic.main.item_post.view.*
  * @desc
  */
 class AlarmFragment : Fragment() {
+    var firestore: FirebaseFirestore? = null
+    var uid: String? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        firestore = FirebaseFirestore.getInstance()
+        uid = FirebaseAuth.getInstance().currentUser?.uid
         var dialog = DeleteDialogFragment()
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_alarm, container, false)
 
@@ -32,7 +38,10 @@ class AlarmFragment : Fragment() {
         view.alarmfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
 
         view.alarm_clear.setOnClickListener {
-            dialog.show(requireActivity().supportFragmentManager, "DeleteDialogFragment")
+//            dialog.show(requireActivity().supportFragmentManager, "DeleteDialogFragment")
+            firestore?.collection("alarm")?.document(uid!!)?.delete()?.addOnSuccessListener {
+            }?.addOnFailureListener {
+            }
         }
 
         return view
