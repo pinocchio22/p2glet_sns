@@ -4,10 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.p2glet_sns.MainActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.google.android.gms.tasks.Task
@@ -110,33 +108,6 @@ class AddPhotoActivity : AppCompatActivity() {
 
             finish()
         }
-//        //Callback method
-//        storageRef?.putFile(photoUri!!)?.addOnSuccessListener {
-//            storageRef.downloadUrl.addOnSuccessListener { uri ->
-//                var contentDTO = ContentDTO()
-//
-//                //Insert downloadUrl of image
-//                contentDTO.imageUrl = uri.toString()
-//
-//                //Insert uid od user
-//                contentDTO.uid = auth?.currentUser?.uid
-//
-//                //Insert userId
-//                contentDTO.userId = auth?.currentUser?.email
-//
-//                //Insert explain of content
-//                contentDTO.explain = addphoto_edit_explain.text.toString()
-//
-//                //Insert timestamp
-//                contentDTO.timestamp = System.currentTimeMillis()
-//
-//                firestore?.collection("images")?.document()?.set(contentDTO)
-//
-//                setResult(Activity.RESULT_OK)
-//
-//                finish()
-//            }
-//        }
     }
 
     fun showProgress(isShow: Boolean) {

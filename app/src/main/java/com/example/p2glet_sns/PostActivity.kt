@@ -1,7 +1,6 @@
 package com.example.p2glet_sns
 
 
-import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -11,21 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.p2glet_sns.navigation.DetailViewFragment
-import com.example.p2glet_sns.navigation.UserFragment
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_detail.*
@@ -195,7 +187,7 @@ class PostActivity : AppCompatActivity() {
 
             //This is chat
             viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
-                var intent = Intent(v.context, ChatActivity2::class.java)
+                var intent = Intent(v.context, ChatActivity::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 intent.putExtra("contentUid", contentUidList[position])
                 startActivity(intent)

@@ -1,7 +1,6 @@
 package com.example.p2glet_sns.navigation
 
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.p2glet_sns.ChatActivity2
+import com.example.p2glet_sns.ChatActivity
 import com.example.p2glet_sns.R
 import com.example.p2glet_sns.navigation.model.AlarmDTO
 import com.example.p2glet_sns.navigation.model.ContentDTO
@@ -143,7 +142,7 @@ class DetailViewFragment : Fragment() {
 //                var intent = Intent(v.context, ChatActivity::class.java)
 //                intent.putExtra("destinationUid", contentDTOs[position].uid)
 //                startActivity(intent)
-                var intent = Intent(v.context, ChatActivity2::class.java)
+                var intent = Intent(v.context, ChatActivity::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 intent.putExtra("contentUid", contentUidList[position])
                 startActivity(intent)
