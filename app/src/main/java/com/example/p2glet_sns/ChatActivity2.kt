@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.p2glet_sns.navigation.model.ChatDTO2
+import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chat2.*
@@ -37,17 +38,6 @@ class ChatActivity2 : AppCompatActivity() {
     var comments : ArrayList<ChatDTO2> = arrayListOf()
     var uid : String? = null
 
-//    init {
-//        firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
-//            //Somtimes, This code return null of querySnapshot when it signout
-//            if (querySnapshot == null) return@addSnapshotListener
-//
-//            //Get data
-//            for (snapshot in querySnapshot.documents) {
-//                chatDTO2.add(snapshot.toObject(ChatDTO2::class.java)!!)
-//            }
-//        }
-//    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val time = System.currentTimeMillis()
@@ -71,24 +61,24 @@ class ChatActivity2 : AppCompatActivity() {
             comment.timestamp = curTime
 
             FirebaseFirestore.getInstance().collection("images").document(contentUid!!).collection("comments").document().set(comment)
-//            commentMessage(destinationUid!!,messageActivity_editText.text.toString())
+            commentMessage(destinationUid!!,messageActivity_editText.text.toString())
             messageActivity_editText.setText("")
         }
     }
 
-//    fun commentMessage(destinationUid : String, message : String) {
-//        var chatDTO2 = ChatDTO2()
-//        chatDTO2.destinationUid = destinationUid
-//        chatDTO2.userId = FirebaseAuth.getInstance().currentUser?.email
-//        chatDTO2.kind = 1
-//        chatDTO2.uid = FirebaseAuth.getInstance().currentUser?.uid
-//        chatDTO2.timestamp = System.currentTimeMillis()
-//        chatDTO2.message = message
-//        FirebaseFirestore.getInstance().collection("message").document().set(chatDTO2)
-//
-//        var msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " of " + message
-//        FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", msg)
-//    }
+    fun commentMessage(destinationUid : String, message : String) {
+        var chatDTO2 = ChatDTO2()
+        chatDTO2.destinationUid = destinationUid
+        chatDTO2.userId = FirebaseAuth.getInstance().currentUser?.email
+        chatDTO2.kind = 1
+        chatDTO2.uid = FirebaseAuth.getInstance().currentUser?.uid
+        chatDTO2.timestamp = System.currentTimeMillis().toString()
+        chatDTO2.message = message
+        FirebaseFirestore.getInstance().collection("message").document().set(chatDTO2)
+
+        var msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " of " + message
+        FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", msg)
+    }
     inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         init {
@@ -132,9 +122,6 @@ class ChatActivity2 : AppCompatActivity() {
                     Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(view.messageItem_imageview_profile)
                 }
             }
-//            Log.d("기준 id", comments[position].uid.toString())
-//            Log.d("비교 id 1", contentUid.toString())
-//            Log.d("비교 id 2", destinationUid.toString())
             if (comments[position].uid.equals(uid)){ //본인 채팅
                 view.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
                 view.messageItem_textView_message.visibility = View.VISIBLE
