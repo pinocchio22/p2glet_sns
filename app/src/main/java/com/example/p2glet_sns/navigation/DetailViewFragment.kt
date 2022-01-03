@@ -46,12 +46,6 @@ class DetailViewFragment : Fragment() {
         return view
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        view?.detailviewfragment_recyclerview?.removeAllViewsInLayout()
-//        view?.detailviewfragment_recyclerview?.adapter = DetailViewRecyclerViewAdapter()
-//    }
-
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUidList : ArrayList<String> = arrayListOf()
@@ -135,13 +129,6 @@ class DetailViewFragment : Fragment() {
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
             }
             viewholder.detailviewitem_comment_imageview.setOnClickListener() { v ->
-////                var intent = Intent(v.context, CommentActivity::class.java)
-////                intent.putExtra("contentUid", contentUidList[position])
-////                intent.putExtra("destinationUid", contentDTOs[position].uid)
-////                startActivity(intent)
-//                var intent = Intent(v.context, ChatActivity::class.java)
-//                intent.putExtra("destinationUid", contentDTOs[position].uid)
-//                startActivity(intent)
                 var intent = Intent(v.context, ChatActivity::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 intent.putExtra("contentUid", contentUidList[position])
@@ -181,12 +168,4 @@ class DetailViewFragment : Fragment() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
-
-//    fun showEmpty(isShow: Boolean) {
-//        if (isShow) {
-//            empty_txt.visibility = View.VISIBLE
-//        } else {
-//            empty_txt.visibility = View.GONE
-//        }
-//    }
 }

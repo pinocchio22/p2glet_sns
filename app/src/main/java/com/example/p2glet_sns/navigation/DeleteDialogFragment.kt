@@ -18,22 +18,6 @@ import java.lang.IllegalStateException
 
 
 class DeleteDialogFragment : DialogFragment() {
-//    companion object {
-//        const val TAG = "TestDialog"
-//        @JvmStatic
-//        fun newInstance(notiMessage : String) =
-//                DeleteDialogFragment().apply {
-//                    arguments = Bundle().apply { putString(Companion.NOTI_MESSAGE_KEY, notiMessage) }
-//                }
-//
-//        private const val NOTI_MESSAGE_KEY = "noti"
-//    }
-//    private var notiMessage : String? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let { notiMessage = it.getString(Companion.NOTI_MESSAGE_KEY) }
-//    }
     var firestore: FirebaseFirestore? = null
     var uid: String? = null
 

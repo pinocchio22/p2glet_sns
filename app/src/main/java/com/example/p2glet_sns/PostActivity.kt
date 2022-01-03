@@ -42,59 +42,6 @@ import kotlin.collections.ArrayList
  * @created 2021-12-21
  * @desc
  */
-//class PostActivity : AppCompatActivity() {
-//
-//    var uid = FirebaseAuth.getInstance().currentUser?.uid
-//    var firestore : FirebaseFirestore? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_post)
-//
-//        firestore = FirebaseFirestore.getInstance()
-//
-//        post_recyclerview.adapter = PostRecyclerViewAdapter()
-//        post_recyclerview.layoutManager = LinearLayoutManager(this)
-//    }
-//
-//    inner class PostRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-//     var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
-//        init {
-//            firestore?.collection("images")?.orderBy("timestamp")?.whereEqualTo("uid", uid)?.addSnapshotListener { querySnapshot, firebaseFirestore ->
-//                //Somtimes, This code return null of querySnapshot when it signout
-//                contentDTOs.clear()
-//                if (querySnapshot == null) return@addSnapshotListener
-//
-//                //Get data
-//                for (snapshot in querySnapshot.documents) {
-//                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
-//                }
-//                notifyDataSetChanged()
-//            }
-//        }
-//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//            var width = resources.displayMetrics.widthPixels / 3
-//            var imageView = ImageView(parent.context)
-//            imageView.layoutParams = LinearLayoutCompat.LayoutParams(width,width)
-//            return CustomViewHolder(imageView)
-//        }
-//
-//        inner class CustomViewHolder(var imageView: ImageView) : RecyclerView.ViewHolder(imageView) {
-//
-//        }
-//
-//        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//            var imageView = (holder as CustomViewHolder).imageView
-//            Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
-//
-//        }
-//
-//        override fun getItemCount(): Int {
-//            return contentDTOs.size
-//        }
-//    }
-//
-//}
 class PostActivity : AppCompatActivity() {
 
     var firestore: FirebaseFirestore? = null
