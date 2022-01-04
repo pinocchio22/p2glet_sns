@@ -52,6 +52,9 @@ class ChatActivity : AppCompatActivity() {
         messageActivity_recyclerview.adapter = CommentRecyclerviewAdapter()
         messageActivity_recyclerview.layoutManager = LinearLayoutManager(this)
 
+        // top name
+//        messageActivity_textView_topName.text = FirebaseAuth.getInstance().currentUser?.email
+
         messageActivity_ImageView?.setOnClickListener {
             var comment = ChatDTO()
             comment.userId = FirebaseAuth.getInstance().currentUser?.email
