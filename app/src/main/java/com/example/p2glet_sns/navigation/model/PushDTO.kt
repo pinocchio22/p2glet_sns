@@ -1,7 +1,5 @@
 package com.example.p2glet_sns.navigation.model
 
-import android.app.Notification
-
 /**
  * @author CHOI
  * @email vviian.2@gmail.com

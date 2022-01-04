@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_chat.view.*
 import kotlinx.android.synthetic.main.activity_comment.*
-import kotlinx.android.synthetic.main.item_chat2.view.*
+import kotlinx.android.synthetic.main.item_chat.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -98,7 +98,7 @@ class ChatActivity : AppCompatActivity() {
             notifyDataSetChanged()
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat2,parent,false)
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat,parent,false)
             return CustomViewHolder(view)
         }
 
