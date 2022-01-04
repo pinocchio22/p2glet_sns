@@ -15,8 +15,8 @@ import com.example.p2glet_sns.navigation.model.ChatDTO
 import com.example.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_chat2.*
-import kotlinx.android.synthetic.main.activity_chat2.view.*
+import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_chat.view.*
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_chat2.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
@@ -45,7 +45,7 @@ class ChatActivity : AppCompatActivity() {
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chat2)
+        setContentView(R.layout.activity_chat)
         contentUid = intent.getStringExtra("contentUid")
         destinationUid = intent.getStringExtra("destinationUid")
 
@@ -66,16 +66,16 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun commentMessage(destinationUid : String, message : String) {
-        var chatDTO2 = ChatDTO()
-        chatDTO2.destinationUid = destinationUid
-        chatDTO2.userId = FirebaseAuth.getInstance().currentUser?.email
-        chatDTO2.kind = 1
-        chatDTO2.uid = FirebaseAuth.getInstance().currentUser?.uid
-        chatDTO2.timestamp = System.currentTimeMillis().toString()
-        chatDTO2.message = message
-        FirebaseFirestore.getInstance().collection("message").document().set(chatDTO2)
+        var chatDTO = ChatDTO()
+        chatDTO.destinationUid = destinationUid
+        chatDTO.userId = FirebaseAuth.getInstance().currentUser?.email
+        chatDTO.kind = 1
+        chatDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+        chatDTO.timestamp = System.currentTimeMillis().toString()
+        chatDTO.message = message
+        FirebaseFirestore.getInstance().collection("alarms").document().set(chatDTO)
 
-        var msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " of " + message
+        var msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + "\" " + message + " \""
         FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", msg)
     }
     inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -113,7 +113,7 @@ class ChatActivity : AppCompatActivity() {
             view.messageItem_textView_message.text = comments[position].message
             view.messageItem_textview_name.text = comments[position].userId
             view.messageItem_textView_time.text = comments[position].timestamp
-//            view.messageActivity_textView_topName.text = comments[position].userId
+//            view.messageActivity_textView_topName.text = destinationUid
 
             FirebaseFirestore.getInstance().collection("profileImages").document(comments[position].uid!!).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {

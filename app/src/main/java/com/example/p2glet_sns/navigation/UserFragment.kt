@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -46,6 +47,10 @@ class UserFragment : Fragment() {
     var uid : String? = null
     var auth : FirebaseAuth? = null
     var currentUserUid : String? = null
+
+    val time = System.currentTimeMillis()
+    val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
+    val curTime = dateFormat.format(Date(time))
 
     companion object {
         var PICK_PROFILE_FROM_ALBUM = 10
@@ -180,7 +185,7 @@ class UserFragment : Fragment() {
         alarmDTO.userId = auth?.currentUser?.email
         alarmDTO.uid = auth?.currentUser?.uid
         alarmDTO.kind = 2
-        alarmDTO.timestamp = System.currentTimeMillis()
+        alarmDTO.timestamp = curTime
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
         var message = auth?.currentUser?.email + getString(R.string.alarm_follow)

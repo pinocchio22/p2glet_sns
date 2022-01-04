@@ -23,6 +23,9 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author CHOI
@@ -31,9 +34,12 @@ import kotlinx.android.synthetic.main.item_detail.view.*
  * @desc
  */
 class DetailViewFragment : Fragment() {
-
     var firestore : FirebaseFirestore? = null
     var uid : String? = null
+
+    val time = System.currentTimeMillis()
+    val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
+    val curTime = dateFormat.format(Date(time))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
@@ -161,7 +167,7 @@ class DetailViewFragment : Fragment() {
             alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
             alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
             alarmDTO.kind = 0
-            alarmDTO.timestamp = System.currentTimeMillis()
+            alarmDTO.timestamp = curTime
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
             var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.alarm_favorite)

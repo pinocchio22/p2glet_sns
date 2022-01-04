@@ -16,5 +16,5 @@ data class AlarmDTO (
         //2 : follow alarm
         var kind : Int? = null,
         var message : String? = null,
-        var timestamp : Long? = null
+        var timestamp : String? = null
 )

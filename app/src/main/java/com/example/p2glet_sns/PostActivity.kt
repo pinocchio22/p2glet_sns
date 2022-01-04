@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoriteco
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
 import kotlinx.android.synthetic.main.item_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,6 +48,10 @@ class PostActivity : AppCompatActivity() {
     var firestore: FirebaseFirestore? = null
     var uid: String? = null
     var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+
+    val time = System.currentTimeMillis()
+    val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
+    val curTime = dateFormat.format(Date(time))
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -203,7 +208,7 @@ class PostActivity : AppCompatActivity() {
             alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
             alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
             alarmDTO.kind = 0
-            alarmDTO.timestamp = System.currentTimeMillis()
+            alarmDTO.timestamp = curTime
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
             var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.alarm_favorite)

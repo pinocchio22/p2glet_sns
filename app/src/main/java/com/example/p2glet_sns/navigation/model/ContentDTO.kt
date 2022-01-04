@@ -17,5 +17,5 @@ data class ContentDTO(var explain : String? = null,
     data class Comment(var uid : String? = null,
                        var userId : String? = null,
                        var comment : String? = null,
-                       var timestamp: Long? = null)
+                       var timestamp: String? = null)
 }
