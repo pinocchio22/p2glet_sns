@@ -1,6 +1,7 @@
 package com.example.p2glet_sns.navigation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +50,7 @@ class AlarmFragment : Fragment() {
     inner class AlarmRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         var alarmDTOList: ArrayList<AlarmDTO> = arrayListOf()
+        var my_email = FirebaseAuth.getInstance().currentUser?.email
 
         init {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -84,8 +86,12 @@ class AlarmFragment : Fragment() {
 
                 when (alarmDTOList[position].kind) {
                     0 -> {
+                        Log.d("알람", alarmDTOList[position].userId.toString())
+                        Log.d("유아이디", my_email.toString())
+                        if (alarmDTOList[position].userId !== my_email){
                         val str_0 = alarmDTOList[position].userId + getString(R.string.alarm_favorite)
                         viewholder.commentviewitem_textview_profile.text = str_0
+                        }
                     }
                     1 -> {
                         val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + "\" " + alarmDTOList[position].message + " \""
