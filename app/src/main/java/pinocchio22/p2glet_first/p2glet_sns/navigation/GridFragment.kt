@@ -1,4 +1,4 @@
-package com.example.p2glet_sns.navigation
+package pinocchio22.p2glet_first.p2glet_sns.navigation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.p2glet_sns.R
-import com.example.p2glet_sns.navigation.model.ContentDTO
+import com.p2glet_first.p2glet_sns.R
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_grid.view.*
 

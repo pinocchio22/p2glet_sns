@@ -1,4 +1,4 @@
-package com.example.p2glet_sns
+package pinocchio22.p2glet_first.p2glet_sns
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,6 +22,7 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.p2glet_first.p2glet_sns.R
 import kotlinx.android.synthetic.main.activity_login.*
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException

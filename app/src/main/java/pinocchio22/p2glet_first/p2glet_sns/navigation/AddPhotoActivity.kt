@@ -1,4 +1,4 @@
-package com.example.p2glet_sns.navigation
+package pinocchio22.p2glet_first.p2glet_sns.navigation
 
 import android.app.Activity
 import android.content.Intent
@@ -6,8 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.p2glet_sns.R
-import com.example.p2glet_sns.navigation.model.ContentDTO
+import com.p2glet_first.p2glet_sns.R
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

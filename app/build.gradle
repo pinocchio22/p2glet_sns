@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.p2glet_sns"
+        applicationId "pinocchio22.p2glet_first.p2glet_sns"
         minSdkVersion 25
         targetSdkVersion 31
         versionCode 1

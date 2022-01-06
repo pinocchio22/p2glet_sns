@@ -1,4 +1,4 @@
-package com.example.p2glet_sns
+package pinocchio22.p2glet_first.p2glet_sns
 
 import android.app.Activity
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.p2glet_sns.navigation.*
+import pinocchio22.p2glet_first.p2glet_sns.navigation.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import com.p2glet_first.p2glet_sns.R
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -1,4 +1,4 @@
-package com.example.p2glet_sns
+package pinocchio22.p2glet_first.p2glet_sns
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

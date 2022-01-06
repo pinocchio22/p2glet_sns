@@ -1,4 +1,4 @@
-package com.example.p2glet_sns.navigation
+package pinocchio22.p2glet_first.p2glet_sns.navigation
 
 import android.app.AlertDialog
 import android.app.Dialog

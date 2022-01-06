@@ -1,4 +1,4 @@
-package com.example.p2glet_sns
+package pinocchio22.p2glet_first.p2glet_sns
 
 
 import android.content.DialogInterface
@@ -13,11 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.p2glet_sns.navigation.model.AlarmDTO
-import com.example.p2glet_sns.navigation.model.ContentDTO
-import com.example.p2glet_sns.navigation.util.FcmPush
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.p2glet_first.p2glet_sns.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.fragment_detail.*

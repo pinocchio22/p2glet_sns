@@ -1,4 +1,4 @@
-package com.example.p2glet_sns.navigation.model
+package pinocchio22.p2glet_first.p2glet_sns.navigation.model
 
 /**
  * @author CHOI

@@ -1,4 +1,4 @@
-package com.example.p2glet_sns
+package pinocchio22.p2glet_first.p2glet_sns
 
 import org.junit.Test
 

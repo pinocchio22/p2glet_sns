@@ -1,6 +1,6 @@
-package com.example.p2glet_sns.navigation.util
+package pinocchio22.p2glet_first.p2glet_sns.navigation.util
 
-import com.example.p2glet_sns.navigation.model.PushDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.PushDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import okhttp3.*
