@@ -11,7 +11,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:id="@+id/detailviewitem_profile_image"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/playstore_logo"
             android:layout_margin="7.5dp"/>
         <TextView
             android:layout_width="wrap_content"
