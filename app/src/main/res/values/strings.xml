@@ -4,6 +4,7 @@
     <string name="fb_login_protocol_scheme">fb652729322549173</string>
     <string name="com.twitter.sdk.android.CONSUMER_KEY">0lY6xdMc8l3Bgkdep8DvfPxe4</string>
     <string name="com.twitter.sdk.android.CONSUMER_SECRET">2Uov8wp8sQWccy1oRRes7Q3VgWfsTE1tokYHblse9TTaF0BW1b</string>
+    <string name="msg_token_fmt"></string>
 
 
     <!-- Sign In -->
