@@ -4,16 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:background="@drawable/trash"
-        android:id="@+id/alarm_clear"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/alarmfragment_recyclerview"
-        android:layout_below="@id/alarm_clear"/>
+        android:id="@+id/alarmfragment_recyclerview" />
 </RelativeLayout>

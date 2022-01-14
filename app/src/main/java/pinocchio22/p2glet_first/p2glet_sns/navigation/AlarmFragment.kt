@@ -36,13 +36,6 @@ class AlarmFragment : Fragment() {
         view.alarmfragment_recyclerview.adapter = AlarmRecyclerviewAdapter()
         view.alarmfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
 
-        view.alarm_clear.setOnClickListener {
-//            dialog.show(requireActivity().supportFragmentManager, "DeleteDialogFragment")
-            firestore?.collection("alarm")?.document(uid!!)?.delete()?.addOnSuccessListener {
-            }?.addOnFailureListener {
-            }
-        }
-
         return view
     }
 

@@ -29,6 +29,12 @@
             <Button
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:background="@drawable/siren"
+                android:layout_toLeftOf="@id/toolbar_delete"
+                android:id="@+id/toolbar_report"/>
+            <Button
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/trash"
                 android:id="@+id/toolbar_delete"/>

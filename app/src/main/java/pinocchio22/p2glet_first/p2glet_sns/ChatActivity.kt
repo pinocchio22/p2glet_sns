@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.p2glet_first.p2glet_sns.R
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.activity_chat.view.*
-import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_chat.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 import java.text.SimpleDateFormat
