@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "485918985405",
+    "firebase_url": "https://p2glet-sns-default-rtdb.firebaseio.com",
     "project_id": "p2glet-sns",
     "storage_bucket": "p2glet-sns.appspot.com"
   },
@@ -9,10 +10,55 @@
       "client_info": {
         "mobilesdk_app_id": "1:485918985405:android:89e2aae4e70c3fdd63bbd4",
         "android_client_info": {
+          "package_name": "com.example.p2glet_sns"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485918985405-817gkt1toaes97tr3bg1es18eltt9612.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.p2glet_sns",
+            "certificate_hash": "58ffaa61091b11d7b4a284e985d06ea0eed00678"
+          }
+        },
+        {
+          "client_id": "485918985405-f0bt109rb85ngf9rimubd9909kik0soa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARDf1RSexgVItpIRBB68Cbf1afyFpD96w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485918985405-f0bt109rb85ngf9rimubd9909kik0soa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485918985405:android:82dfc8d7b78d11de63bbd4",
+        "android_client_info": {
           "package_name": "pinocchio22.p2glet_first.p2glet_sns"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "485918985405-42b22j8gk8u0cfmhoedlrcssap38kmes.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pinocchio22.p2glet_first.p2glet_sns",
+            "certificate_hash": "58ffaa61091b11d7b4a284e985d06ea0eed00678"
+          }
+        },
         {
           "client_id": "485918985405-f0bt109rb85ngf9rimubd9909kik0soa.apps.googleusercontent.com",
           "client_type": 3

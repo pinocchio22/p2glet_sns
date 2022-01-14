@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onCancel() {
-                    TODO("Not yet implemented")
+                    finish()
                 }
 
                 override fun onError(error: FacebookException?) {

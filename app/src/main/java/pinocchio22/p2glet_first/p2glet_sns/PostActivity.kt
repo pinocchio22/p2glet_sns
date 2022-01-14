@@ -8,14 +8,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.p2glet_first.p2glet_sns.R
@@ -33,10 +33,12 @@ import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoriteco
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
 import kotlinx.android.synthetic.main.item_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -153,6 +155,7 @@ class PostActivity : AppCompatActivity() {
             }
 
             //This is report button
+            viewholder.toolbar_report.visibility = View.VISIBLE
             viewholder.toolbar_report.setOnClickListener {
                 var builder = AlertDialog.Builder(this@PostActivity)
                 builder.setTitle("신고 하시겠습니까?")
@@ -162,7 +165,7 @@ class PostActivity : AppCompatActivity() {
                     override fun onClick(p0: DialogInterface?, p1: Int) {
                         when(p1) {
                             DialogInterface.BUTTON_POSITIVE ->
-                                reportPost(position,contentDTOs[position].uid!!)
+                                reportPost(position, contentDTOs[position].uid!!)
                             DialogInterface.BUTTON_NEGATIVE ->
                                 finish()
                         }
@@ -217,12 +220,14 @@ class PostActivity : AppCompatActivity() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
 
             //delete post
-            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {
-                notifyDataSetChanged()
-            }?.addOnFailureListener {}
+            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener (object : OnSuccessListener<Void?> {
+                override fun onSuccess(p0: Void) {
+                    val intent = Intent(this@PostActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            })?.addOnFailureListener {}
             firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
-                var intent = Intent(this@PostActivity, MainActivity::class.java)
-                startActivity(intent)
+
                 notifyDataSetChanged()
             }?.addOnFailureListener {}
         }
@@ -261,4 +266,23 @@ class PostActivity : AppCompatActivity() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
+
+//    private fun deleteItem(position: Int) {
+//        mStorage.getReference().child("userImages").child("uid/").child(contentslist.get(position).photoName).delete()
+//                .addOnSuccessListener(object : OnSuccessListener<Void?> {
+//                    fun onSuccess(aVoid: Void?) {
+//                        // removeValue 말고 setValue(null)도 삭제가능
+//                        mDatabase.getReference().child("contents").child("content").child(uidLists.get(position)).removeValue()
+//                                .addOnSuccessListener(object : OnSuccessListener<Void?> {
+//                                    fun onSuccess(aVoid: Void?) {
+//                                        Toast.makeText(this@Today_MainActivity, "삭제 완료", Toast.LENGTH_LONG).show()
+//                                    }
+//                                }).addOnFailureListener(OnFailureListener
+//                                // DB에서 Fail날경우는 거의 없음..
+//                                {
+//                                    // fail ui
+//                                })
+//                    }
+//                }).addOnFailureListener(OnFailureListener { Toast.makeText(this@Today_MainActivity, "삭제 실패", Toast.LENGTH_LONG).show() })
+//    }
 }

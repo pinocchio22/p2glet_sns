@@ -10,6 +10,5 @@ class ReportDTO (
     var destinationUid : String? = null,
     var userId : String? = null,
     var uid : String? = null,
-
     var count : Int? = null
 )
