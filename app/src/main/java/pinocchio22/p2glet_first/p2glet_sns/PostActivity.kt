@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_favoriteco
 import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_imageview_content
 import kotlinx.android.synthetic.main.item_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -151,6 +152,27 @@ class PostActivity : AppCompatActivity() {
                 onBackPressed()
             }
 
+            //This is report button
+            viewholder.toolbar_report.setOnClickListener {
+                var builder = AlertDialog.Builder(this@PostActivity)
+                builder.setTitle("신고 하시겠습니까?")
+                builder.setMessage("확인 버튼을 누르면 해당 게시물이 신고되고 삭제됩니다.")
+
+                var listener = object  : DialogInterface.OnClickListener {
+                    override fun onClick(p0: DialogInterface?, p1: Int) {
+                        when(p1) {
+                            DialogInterface.BUTTON_POSITIVE ->
+                                reportPost(position,contentDTOs[position].uid!!)
+                            DialogInterface.BUTTON_NEGATIVE ->
+                                finish()
+                        }
+                    }
+                }
+                builder.setPositiveButton("확인", listener)
+                builder.setNegativeButton("취소", listener)
+                builder.show()
+            }
+
             //This is delete button
             viewholder.toolbar_delete.setOnClickListener {
                 var builder = AlertDialog.Builder(this@PostActivity)
@@ -174,12 +196,35 @@ class PostActivity : AppCompatActivity() {
         }
 
         fun deletePost(position: Int){
-            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {}
+            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {
+                notifyDataSetChanged()
+            }?.addOnFailureListener {}
             firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
                 finish()
                 notifyDataSetChanged()
-            }?.addOnFailureListener {
-            }
+            }?.addOnFailureListener {}
+        }
+        fun reportPost(position: Int, destinationUid: String) {
+            // report alarm
+            var reportDTO = ReportDTO()
+            reportDTO.destinationUid = destinationUid
+            reportDTO.userId = FirebaseAuth.getInstance().currentUser?.email
+            reportDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+            reportDTO.count = reportDTO.count?.plus(1)
+            FirebaseFirestore.getInstance().collection("report").document().set(reportDTO)
+
+            var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.report_post)
+            FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
+
+            //delete post
+            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener {
+                notifyDataSetChanged()
+            }?.addOnFailureListener {}
+            firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
+                var intent = Intent(this@PostActivity, MainActivity::class.java)
+                startActivity(intent)
+                notifyDataSetChanged()
+            }?.addOnFailureListener {}
         }
 
         fun favoriteEvent(position: Int) {

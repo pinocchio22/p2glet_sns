@@ -42,6 +42,7 @@
     <string name="alarm_who">님이&#160;</string>
     <string name="alarm_comment">&#160;님이 메세지를 남겼습니다.</string>
     <string name="alarm_follow">님이 당신의 계정을 팔로워하기 시작했습니다.</string>
+    <string name="report_post">님이 당신의 게시물을 신고하였습니다.</string>
 
     <!-- Comment -->
     <string name="send">보내기</string>
