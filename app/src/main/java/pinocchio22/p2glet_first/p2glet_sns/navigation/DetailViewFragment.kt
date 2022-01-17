@@ -109,7 +109,7 @@ class DetailViewFragment : Fragment() {
                 if (documentSnapshot.data != null) {
                     var url = documentSnapshot?.data!!["image"]
 //                Log.d("액티비티", requireContext().toString())
-                    Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
+                    Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
                 }
             }
 

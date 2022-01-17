@@ -78,27 +78,17 @@ class AlarmFragment : Fragment() {
 
                 when (alarmDTOList[position].kind) {
                     0 -> {
-//                        Log.d("알람", alarmDTOList[position].userId.toString())
-//                        Log.d("유아이디", my_email.toString())
-                        if (alarmDTOList[position].userId == my_email) {
-                            viewholder.comment_item_layout.visibility = View.GONE
-                        } else{
-                            val str_0 = alarmDTOList[position].userId + getString(R.string.alarm_favorite)
-                            viewholder.comment_item_layout.visibility = View.VISIBLE
-                            viewholder.commentviewitem_textview_profile.text = str_0
-                        }
+                        val str_0 = alarmDTOList[position].userId + getString(R.string.alarm_favorite)
+                        viewholder.comment_item_layout.visibility = View.VISIBLE
+                        viewholder.commentviewitem_textview_profile.text = str_0
                     }
                     1 -> {
-                        if (alarmDTOList[position].userId !== my_email) {
-                            val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + "\" " + alarmDTOList[position].message + " \""
-                            viewholder.commentviewitem_textview_profile.text = str_0
-                        }
+                        val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + "\" " + alarmDTOList[position].message + " \""
+                        viewholder.commentviewitem_textview_profile.text = str_0
                     }
                     2 -> {
-                        if (alarmDTOList[position].userId !== my_email) {
-                            val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_follow)
-                            viewholder.commentviewitem_textview_profile.text = str_0
-                        }
+                        val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_follow)
+                        viewholder.commentviewitem_textview_profile.text = str_0
                     }
                 }
                 viewholder.commentviewitem_textview_comment.visibility = View.INVISIBLE
