@@ -17,19 +17,14 @@
                 android:src="@drawable/ic_arrow_back"
                 android:id="@+id/toolbar_btn_back"/>
             <TextView
-                android:layout_width="270dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:id="@+id/toolbar_username"
                 android:text="UserID"
                 android:textSize="16sp"
                 android:textColor="@color/colorNavIcon"
                 android:layout_toRightOf="@+id/toolbar_btn_back"/>
-            <Button
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/siren"
-                android:layout_toRightOf="@id/toolbar_username"
-                android:id="@+id/toolbar_report"/>
+
             <Button
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -59,12 +54,24 @@
             android:layout_height="35dp"
             android:src="@drawable/ic_chat_black"
             android:id="@+id/detailviewitem_comment_imageview"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <Button
+            android:id="@+id/toolbar_report"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/siren" />
 
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="like 0"
+        android:layout_marginLeft="8dp"
         android:id="@+id/detailviewitem_favoritecounter_textview"/>
     <TextView
         android:layout_width="wrap_content"

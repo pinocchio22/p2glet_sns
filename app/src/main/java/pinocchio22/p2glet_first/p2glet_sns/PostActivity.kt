@@ -39,6 +39,7 @@ import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -165,7 +166,7 @@ class PostActivity : AppCompatActivity() {
                     override fun onClick(p0: DialogInterface?, p1: Int) {
                         when(p1) {
                             DialogInterface.BUTTON_POSITIVE ->
-                                reportPost(position, contentDTOs[position].uid!!)
+                                reportPost(position)
                             DialogInterface.BUTTON_NEGATIVE ->
                                 finish()
                         }
@@ -207,29 +208,35 @@ class PostActivity : AppCompatActivity() {
                 notifyDataSetChanged()
             }?.addOnFailureListener {}
         }
-        fun reportPost(position: Int, destinationUid: String) {
+        fun reportPost(position: Int) {
+            //report count
+            var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
+            firestore?.runTransaction { transaction ->
+                var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+                if (contentDTO!!.report.containsKey(uid)) {
+                    contentDTO.count = contentDTO.count + 1
+                    if (contentDTO.count == 3) {
+                        deletePost(position)
+                    }
+                } else {
+                    //when the button is not clicked
+                    contentDTO.count = contentDTO.count + 1
+                    contentDTO.report[uid!!] = true
+                    reportAlarm(contentDTOs[position].uid!!)
+                }
+                transaction.set(tsDoc, contentDTO)
+            }
+        }
+        fun reportAlarm(destinationUid: String){
             // report alarm
             var reportDTO = ReportDTO()
             reportDTO.destinationUid = destinationUid
             reportDTO.userId = FirebaseAuth.getInstance().currentUser?.email
             reportDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
-            reportDTO.count = reportDTO.count?.plus(1)
             FirebaseFirestore.getInstance().collection("report").document().set(reportDTO)
 
             var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.report_post)
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
-
-            //delete post
-            firestore?.collection("images")?.document(contentUidList[position])?.collection("comment")?.document()?.delete()?.addOnSuccessListener (object : OnSuccessListener<Void?> {
-                override fun onSuccess(p0: Void) {
-                    val intent = Intent(this@PostActivity, MainActivity::class.java)
-                    startActivity(intent)
-                }
-            })?.addOnFailureListener {}
-            firestore?.collection("images")?.document(contentUidList[position])?.delete()?.addOnSuccessListener {
-
-                notifyDataSetChanged()
-            }?.addOnFailureListener {}
         }
 
         fun favoriteEvent(position: Int) {
@@ -237,16 +244,15 @@ class PostActivity : AppCompatActivity() {
             firestore?.runTransaction { transaction ->
 
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
-                Log.d("콘텐", contentDTO.toString())
 
                 if (contentDTO!!.favorites.containsKey(uid)) {
                     //when the button is clicked
-                    contentDTO?.favoriteCount = contentDTO?.favoriteCount - 1
-                    contentDTO?.favorites.remove(uid)
+                    contentDTO.favoriteCount = contentDTO.favoriteCount - 1
+                    contentDTO.favorites.remove(uid)
                 } else {
                     //when the button is not clicked
-                    contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
-                    contentDTO?.favorites[uid!!] = true
+                    contentDTO.favoriteCount = contentDTO.favoriteCount + 1
+                    contentDTO.favorites[uid!!] = true
                     favoriteAlarm(contentDTOs[position].uid!!)
                 }
                 transaction.set(tsDoc, contentDTO)

@@ -10,5 +10,5 @@ class ReportDTO (
     var destinationUid : String? = null,
     var userId : String? = null,
     var uid : String? = null,
-    var count : Int? = null
-)
+    var count : Int = 0,
+    var report : MutableMap<String, Boolean> = HashMap())
