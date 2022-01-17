@@ -210,6 +210,7 @@ class PostActivity : AppCompatActivity() {
         }
         fun reportPost(position: Int) {
             //report count
+            reportAlarm(contentDTOs[position].uid!!)
             var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction { transaction ->
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
@@ -222,18 +223,18 @@ class PostActivity : AppCompatActivity() {
                     //when the button is not clicked
                     contentDTO.count = contentDTO.count + 1
                     contentDTO.report[uid!!] = true
-                    reportAlarm(contentDTOs[position].uid!!)
                 }
                 transaction.set(tsDoc, contentDTO)
             }
         }
         fun reportAlarm(destinationUid: String){
-            // report alarm
-            var reportDTO = ReportDTO()
-            reportDTO.destinationUid = destinationUid
-            reportDTO.userId = FirebaseAuth.getInstance().currentUser?.email
-            reportDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
-            FirebaseFirestore.getInstance().collection("report").document().set(reportDTO)
+            var alarmDTO = AlarmDTO()
+            alarmDTO.destinationUid = destinationUid
+            alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
+            alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+            alarmDTO.kind = 3
+            alarmDTO.timestamp = curTime
+            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
             var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.report_post)
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)

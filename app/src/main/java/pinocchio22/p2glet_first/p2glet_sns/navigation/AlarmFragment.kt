@@ -30,7 +30,6 @@ class AlarmFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         firestore = FirebaseFirestore.getInstance()
         uid = FirebaseAuth.getInstance().currentUser?.uid
-        var dialog = DeleteDialogFragment()
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_alarm, container, false)
 
         view.alarmfragment_recyclerview.adapter = AlarmRecyclerviewAdapter()
@@ -42,7 +41,6 @@ class AlarmFragment : Fragment() {
     inner class AlarmRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         var alarmDTOList: ArrayList<AlarmDTO> = arrayListOf()
-        var my_email = FirebaseAuth.getInstance().currentUser?.email
 
         init {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -79,19 +77,21 @@ class AlarmFragment : Fragment() {
                 when (alarmDTOList[position].kind) {
                     0 -> {
                         val str_0 = alarmDTOList[position].userId + getString(R.string.alarm_favorite)
-                        viewholder.comment_item_layout.visibility = View.VISIBLE
-                        viewholder.commentviewitem_textview_profile.text = str_0
+                        viewholder.alarm_content.text = str_0
                     }
                     1 -> {
                         val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + "\" " + alarmDTOList[position].message + " \""
-                        viewholder.commentviewitem_textview_profile.text = str_0
+                        viewholder.alarm_content.text = str_0
                     }
                     2 -> {
                         val str_0 = alarmDTOList[position].userId + " " + getString(R.string.alarm_follow)
-                        viewholder.commentviewitem_textview_profile.text = str_0
+                        viewholder.alarm_content.text = str_0
+                    }
+                    3 -> {
+                        val str_0 = alarmDTOList[position].userId + " " + getString(R.string.report_post)
+                        viewholder.alarm_content.text = str_0
                     }
                 }
-                viewholder.commentviewitem_textview_comment.visibility = View.INVISIBLE
             }
 
             override fun getItemCount(): Int {

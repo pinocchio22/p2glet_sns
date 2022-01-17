@@ -14,16 +14,16 @@
         android:layout_toRightOf="@id/commentviewitem_imageview_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UserID"
+        android:text="Alarm"
         android:textStyle="bold"
         android:layout_margin="7.5dp"
-        android:id="@+id/commentviewitem_textview_profile"/>
-    <TextView
-        android:layout_toRightOf="@id/commentviewitem_textview_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message"
-        android:layout_margin="7.5dp"
-        android:id="@+id/commentviewitem_textview_comment"/>
+        android:id="@+id/alarm_content"/>
+<!--    <TextView-->
+<!--        android:layout_toRightOf="@id/commentviewitem_textview_profile"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Message"-->
+<!--        android:layout_margin="7.5dp"-->
+<!--        android:id="@+id/commentviewitem_textview_comment"/>-->
 
 </RelativeLayout>
