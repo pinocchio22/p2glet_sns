@@ -34,6 +34,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/logo_title"/>
+            <Button
+                android:id="@+id/user_report"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/siren"
+                android:layout_alignParentRight="true"/>
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout

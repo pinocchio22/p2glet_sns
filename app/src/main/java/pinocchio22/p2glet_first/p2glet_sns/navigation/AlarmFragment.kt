@@ -91,6 +91,10 @@ class AlarmFragment : Fragment() {
                         val str_0 = alarmDTOList[position].userId + " " + getString(R.string.report_post)
                         viewholder.alarm_content.text = str_0
                     }
+                    4 -> {
+                        val str_0 = alarmDTOList[position].userId + " " + getString(R.string.report_User)
+                        viewholder.alarm_content.text = str_0
+                    }
                 }
             }
 

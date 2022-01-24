@@ -15,18 +15,11 @@
             android:src="@drawable/ic_account"
             android:layout_alignParentLeft="true"/>
         <Button
-            android:layout_width="280dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:id="@+id/account_btn_follow_signout"
             android:text="@string/follow"
             android:layout_toRightOf="@id/account_iv_profile"
-            android:layout_alignParentBottom="true"/>
-        <Button
-            android:id="@+id/user_report"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_toRightOf="@id/account_btn_follow_signout"
-            android:background="@drawable/siren"
             android:layout_alignParentBottom="true"/>
         <LinearLayout
             android:gravity="center"
