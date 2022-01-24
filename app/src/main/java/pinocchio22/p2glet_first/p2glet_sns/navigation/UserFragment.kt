@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
@@ -53,7 +54,7 @@ class UserFragment : Fragment() {
     var uid: String? = null
     var auth: FirebaseAuth? = null
     var currentUserUid: String? = null
-    var reportDTO : ArrayList<ReportDTO> = arrayListOf()
+    var reportDTO: ArrayList<ReportDTO> = arrayListOf()
 
     val time = System.currentTimeMillis()
     val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
@@ -70,7 +71,7 @@ class UserFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUserUid = auth?.currentUser?.uid
 
-        val alertDialog : AlertDialog? = activity?.let {
+        val alertDialog: AlertDialog? = activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
                 setPositiveButton("확인", DialogInterface.OnClickListener { dialogInterface, i ->
@@ -90,9 +91,19 @@ class UserFragment : Fragment() {
                 activity?.finish()
                 startActivity(Intent(activity, LoginActivity::class.java))
                 auth?.signOut()
+
+            }
+            fragmentView?.account_iv_profile?.setOnClickListener {
+                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                activity?.startActivityForResult(photoPickerIntent, PICK_PROFILE_FROM_ALBUM)
             }
         } else {
             //OtherUserPage
+            fragmentView?.account_iv_profile?.setOnClickListener {
+                // 프로필 확대
+                Toast.makeText(context, "상대방 프로필", Toast.LENGTH_SHORT).show()
+            }
             fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
             var mainactivity = (activity as MainActivity)
             mainactivity?.toolbar_username?.text = arguments?.getString("userId")
@@ -118,11 +129,11 @@ class UserFragment : Fragment() {
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
         UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
 
-        fragmentView?.account_iv_profile?.setOnClickListener {
-            var photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            activity?.startActivityForResult(photoPickerIntent, PICK_PROFILE_FROM_ALBUM)
-        }
+//        fragmentView?.account_iv_profile?.setOnClickListener {
+//            var photoPickerIntent = Intent(Intent.ACTION_PICK)
+//            photoPickerIntent.type = "image/*"
+//            activity?.startActivityForResult(photoPickerIntent, PICK_PROFILE_FROM_ALBUM)
+//        }
         getProfileImage()
         getFollowerAndFollowing()
         return fragmentView
@@ -253,7 +264,8 @@ class UserFragment : Fragment() {
             transaction.set(tsDoc, reportDTO)
         }
     }
-    fun reportAlarm(destinationUid: String){
+
+    fun reportAlarm(destinationUid: String) {
         var alarmDTO = AlarmDTO()
         alarmDTO.destinationUid = destinationUid
         alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
