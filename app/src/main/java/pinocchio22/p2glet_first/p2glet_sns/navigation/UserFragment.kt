@@ -89,16 +89,15 @@ class UserFragment : Fragment() {
             mainactivity?.toolbar_username?.visibility = View.VISIBLE
             mainactivity?.toolbar_btn_back?.visibility = View.VISIBLE
             mainactivity?.user_report?.visibility = View.VISIBLE
+            mainactivity?.user_report?.setOnClickListener {
+                //This is report button
+                reportUser()
+            }
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 requestFollow()
             }
 
         }
-
-        //This is report button
-//        fragmentView?.user_report?.setOnClickListener {
-//            reportUser()
-//        }
 
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
@@ -218,9 +217,14 @@ class UserFragment : Fragment() {
     fun reportUser() {
         //report count
         reportAlarm(uid!!)
-        var tsDoc = firestore?.collection("report")?.document(currentUserUid!!)
+        var tsDoc = firestore?.collection("report")?.document(uid!!)
         firestore?.runTransaction { transaction ->
-            var reportDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+            var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
+            if (reportDTO == null) {
+                reportDTO = ReportDTO()
+                reportDTO.count = reportDTO.count + 1
+                reportDTO.report[uid!!] = true
+            }
             if (reportDTO!!.report.containsKey(uid)) {
                 reportDTO.count = reportDTO.count + 1
                 if (reportDTO.count == 3) {
