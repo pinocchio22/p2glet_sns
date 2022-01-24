@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -28,6 +29,7 @@ import pinocchio22.p2glet_first.p2glet_sns.navigation.model.FollowDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
@@ -68,6 +70,18 @@ class UserFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUserUid = auth?.currentUser?.uid
 
+        val alertDialog : AlertDialog? = activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton("확인", DialogInterface.OnClickListener { dialogInterface, i ->
+                    reportUser()
+                })
+                setNegativeButton("취소", DialogInterface.OnClickListener { dialogInterface, i ->
+                })
+            }
+            builder.create()
+        }
+
 
         if (uid == currentUserUid) {
             //MyPage
@@ -91,7 +105,8 @@ class UserFragment : Fragment() {
             mainactivity?.user_report?.visibility = View.VISIBLE
             mainactivity?.user_report?.setOnClickListener {
                 //This is report button
-                reportUser()
+                alertDialog?.setMessage("확인을 누르시면 사용자가 신고됩니다.")
+                alertDialog?.show()
             }
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 requestFollow()
@@ -250,12 +265,6 @@ class UserFragment : Fragment() {
         var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.report_post)
         FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
     }
-//    fun deleteUser(position: Int){
-//        FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener { task ->
-//            if(task.isSuccessful){
-//            }
-//        }
-//    }
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
