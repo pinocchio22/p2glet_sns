@@ -254,7 +254,7 @@ class UserFragment : Fragment() {
             if (reportDTO!!.report.containsKey(uid)) {
                 reportDTO.count = reportDTO.count + 1
                 if (reportDTO.count == 3) {
-                    // 관리자 판단하에 삭제
+                    // 신고 3회가 쌓이면 관리자에 의하여 삭제
                 }
             } else {
                 //when the button is not clicked
