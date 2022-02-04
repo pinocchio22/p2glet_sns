@@ -54,7 +54,6 @@ class UserFragment : Fragment() {
     var uid: String? = null
     var auth: FirebaseAuth? = null
     var currentUserUid: String? = null
-    var reportDTO: ArrayList<ReportDTO> = arrayListOf()
 
     val time = System.currentTimeMillis()
     val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
@@ -74,11 +73,11 @@ class UserFragment : Fragment() {
         val alertDialog: AlertDialog? = activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
-                setPositiveButton("확인", DialogInterface.OnClickListener { dialogInterface, i ->
+                setPositiveButton("확인") { dialogInterface, i ->
                     reportUser()
-                })
-                setNegativeButton("취소", DialogInterface.OnClickListener { dialogInterface, i ->
-                })
+                }
+                setNegativeButton("취소") { dialogInterface, i ->
+                }
             }
             builder.create()
         }
@@ -249,6 +248,7 @@ class UserFragment : Fragment() {
             if (reportDTO == null) {
                 reportDTO = ReportDTO()
                 reportDTO.count = reportDTO.count + 1
+                reportDTO.userId = FirebaseAuth.getInstance().currentUser?.email
                 reportDTO.report[uid!!] = true
             }
             if (reportDTO!!.report.containsKey(uid)) {

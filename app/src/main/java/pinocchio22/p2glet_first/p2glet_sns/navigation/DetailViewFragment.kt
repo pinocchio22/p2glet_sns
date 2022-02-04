@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,6 +50,7 @@ class DetailViewFragment : Fragment() {
         view.detailviewfragment_recyclerview.adapter = DetailViewRecyclerViewAdapter()
         view.detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
 //        DetailViewRecyclerViewAdapter().notifyDataSetChanged()
+
         return view
     }
 
@@ -90,6 +92,8 @@ class DetailViewFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
+            //Report User
+            removerUser(position, holder)
             //UserId
             viewholder.detailviewitem_profile_textview.text = contentDTOs!![position].userId
 
@@ -172,6 +176,16 @@ class DetailViewFragment : Fragment() {
 
             var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.alarm_favorite)
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
+        }
+
+        fun removerUser(position : Int, holder : RecyclerView.ViewHolder) {
+            var tsDoc = firestore?.collection("report")?.document(uid!!)
+            firestore?.runTransaction { transaction ->
+                var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
+                if (contentDTOs[position].userId == reportDTO?.userId && reportDTO!!.report[uid] == true) {
+                    holder.itemView.detailviewitem_imageview_content.visibility = View.GONE
+                }
+            }
         }
     }
 }
