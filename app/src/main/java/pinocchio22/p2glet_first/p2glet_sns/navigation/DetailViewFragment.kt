@@ -2,6 +2,7 @@ package pinocchio22.p2glet_first.p2glet_sns.navigation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,6 +95,7 @@ class DetailViewFragment : Fragment() {
 
             //Report User
             removerUser(position, holder)
+
             //UserId
             viewholder.detailviewitem_profile_textview.text = contentDTOs!![position].userId
 
@@ -182,7 +184,10 @@ class DetailViewFragment : Fragment() {
             var tsDoc = firestore?.collection("report")?.document(uid!!)
             firestore?.runTransaction { transaction ->
                 var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
-                if (contentDTOs[position].userId == reportDTO?.userId && reportDTO!!.report[uid] == true) {
+                Log.d("게시글유저", contentDTOs[position].uid.toString())
+                Log.d("신고유저", reportDTO?.destinationUid.toString())
+                Log.d("신고여부유저", reportDTO!!.report.containsKey(contentDTOs[position].uid).toString())
+                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(contentDTOs[position].uid)) {
                     holder.itemView.detailviewitem_imageview_content.visibility = View.GONE
                 }
             }

@@ -74,7 +74,7 @@ class UserFragment : Fragment() {
             val builder = AlertDialog.Builder(it)
             builder.apply {
                 setPositiveButton("확인") { dialogInterface, i ->
-                    reportUser()
+                    reportUser(uid!!)
                 }
                 setNegativeButton("취소") { dialogInterface, i ->
                 }
@@ -121,9 +121,12 @@ class UserFragment : Fragment() {
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 requestFollow()
             }
-
         }
 
+        //This is report button
+//        fragmentView?.user_report?.setOnClickListener {
+//            reportUser()
+//        }
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
         UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
@@ -239,10 +242,10 @@ class UserFragment : Fragment() {
         }
     }
 
-    fun reportUser() {
+    fun reportUser(destinationUid: String) {
         //report count
         reportAlarm(uid!!)
-        var tsDoc = firestore?.collection("report")?.document(uid!!)
+        var tsDoc = firestore?.collection("report")?.document(currentUserUid!!)
         firestore?.runTransaction { transaction ->
             var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
             if (reportDTO == null) {
@@ -250,6 +253,10 @@ class UserFragment : Fragment() {
                 reportDTO.count = reportDTO.count + 1
                 reportDTO.userId = FirebaseAuth.getInstance().currentUser?.email
                 reportDTO.report[uid!!] = true
+                reportDTO.destinationUid = destinationUid
+
+                transaction.set(tsDoc, reportDTO)
+                return@runTransaction
             }
             if (reportDTO!!.report.containsKey(uid)) {
                 reportDTO.count = reportDTO.count + 1
@@ -262,6 +269,7 @@ class UserFragment : Fragment() {
                 reportDTO.report[uid!!] = true
             }
             transaction.set(tsDoc, reportDTO)
+            return@runTransaction
         }
     }
 
