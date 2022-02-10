@@ -1,6 +1,7 @@
 package pinocchio22.p2glet_first.p2glet_sns.navigation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,29 +70,11 @@ class GridFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var imageView = (holder as CustomViewHolder).imageView
             Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
-            removerUser(position, holder)
+            Log.d("wwgrid",contentDTOs.toString())
         }
 
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
-
-        fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
-            var tsDoc = firestore?.collection("report")?.document(uid!!)
-            firestore?.runTransaction { transaction ->
-                var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
-                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
-                        contentDTOs[position].uid
-                    )) {
-                    //hide blocked users
-                    holder.itemView.detailviewitem_main.visibility = View.GONE
-                    notifyDataSetChanged()
-                }else {
-                    holder.itemView.detailviewitem_main.visibility = View.VISIBLE
-                    notifyDataSetChanged()
-                }
-            }
-        }
-
     }
 }

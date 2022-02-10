@@ -3,9 +3,11 @@ package pinocchio22.p2glet_first.p2glet_sns.navigation
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -64,7 +66,7 @@ class DetailViewFragment : Fragment() {
     }
 
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
+        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
         var contentUidList: ArrayList<String> = arrayListOf()
 
         init {
@@ -105,9 +107,6 @@ class DetailViewFragment : Fragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
-
-            //Block abusive user
-            removerUser(position, holder)
 
             //UserId
             viewholder.detailviewitem_profile_textview.text = contentDTOs!![position].userId
@@ -168,6 +167,9 @@ class DetailViewFragment : Fragment() {
                 intent.putExtra("contentUid", contentUidList[position])
                 startActivity(intent)
             }
+
+            //Block abusive user
+            removerUser(position, holder)
         }
 
         fun favoriteEvent(position: Int) {
@@ -206,40 +208,24 @@ class DetailViewFragment : Fragment() {
 
         fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
             var tsDoc = firestore?.collection("report")?.document(uid!!)
-            var contentDTOs2 : ArrayList<ContentDTO> = arrayListOf()
             firestore?.runTransaction { transaction ->
                 var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
                 if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
                         contentDTOs[position].uid
                     )
                 ) {
-                    contentDTOs.removeAt(position)
-                    contentDTOs2.addAll(contentDTOs)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, contentDTOs.size)
-                    contentDTOs.addAll(contentDTOs2)
-                }else {
-                    holder.itemView.detailviewitem_main.visibility = View.VISIBLE
+                    contentDTOs[position].userId = null
+//                    contentDTOs.removeAt(position)
+//                    contentDTOs2.addAll(contentDTOs)
+                    Log.d("ww1", contentDTOs.toString())
+//                    notifyDataSetChanged()
+//                    notifyItemChanged(position)
+//                    notifyItemRemoved(position)
+//                    notifyItemRangeChanged(position, contentDTOs.size)
+//                    contentDTOs.addAll(contentDTOs2)
+
                 }
             }
-        }
-    }
-
-    fun refreshFragment() {
-        val ft = requireFragmentManager().beginTransaction()
-        ft.detach(this).attach(this).commit()
-    }
-
-    private fun removeFragment(fragment: Fragment) {
-        var fragment: Fragment? = fragment
-        if (fragment != null) {
-            val mFragmentManager: FragmentManager = requireActivity().supportFragmentManager
-            val mFragmentTransaction: FragmentTransaction = mFragmentManager.beginTransaction()
-            mFragmentTransaction.remove(fragment)
-            mFragmentTransaction.commit()
-            fragment.onDestroy()
-            fragment.onDetach()
-            fragment = null
         }
     }
 }

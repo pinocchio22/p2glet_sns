@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -123,19 +124,10 @@ class UserFragment : Fragment() {
             }
         }
 
-        //This is report button
-//        fragmentView?.user_report?.setOnClickListener {
-//            reportUser()
-//        }
         fragmentView?.account_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager = GridLayoutManager(activity, 3)
         UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
 
-//        fragmentView?.account_iv_profile?.setOnClickListener {
-//            var photoPickerIntent = Intent(Intent.ACTION_PICK)
-//            photoPickerIntent.type = "image/*"
-//            activity?.startActivityForResult(photoPickerIntent, PICK_PROFILE_FROM_ALBUM)
-//        }
         getProfileImage()
         getFollowerAndFollowing()
         return fragmentView
@@ -300,6 +292,7 @@ class UserFragment : Fragment() {
                 fragmentView?.account_tv_post_count?.text = contentDTOs.size.toString()
                 notifyDataSetChanged()
             }
+            Log.d("wwuser",contentDTOs.toString())
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -320,7 +313,6 @@ class UserFragment : Fragment() {
             holder.imageView.setOnClickListener {
                 var intent = Intent(context, PostActivity::class.java)
                 intent.putExtra("userId", uid)
-//                Log.d("유저1", intent.hasExtra("userId").toString())
                 startActivity(intent)
             }
         }
@@ -328,26 +320,5 @@ class UserFragment : Fragment() {
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
-    }
-
-    override fun onResume() {
-        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
-
-        super.onResume()
-
-        UserFragmentRecyclerViewAdapter().notifyDataSetChanged()
-
-        //Test 필요
-//        refreshFragment(this, requireFragmentManager())
-//        val ft = requireFragmentManager().beginTransaction()
-//        if (Build.VERSION.SDK_INT >= 26) {
-//            ft.setReorderingAllowed(false)
-//        }
-//        ft.detach(this).attach(this).commit()
-    }
-
-    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
-        var ft: FragmentTransaction = fragmentManager.beginTransaction()
-        ft.detach(fragment).attach(fragment).commit()
     }
 }
