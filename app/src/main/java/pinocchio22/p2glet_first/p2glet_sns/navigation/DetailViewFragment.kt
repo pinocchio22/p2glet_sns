@@ -2,32 +2,33 @@ package pinocchio22.p2glet_first.p2glet_sns.navigation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import pinocchio22.p2glet_first.p2glet_sns.ChatActivity
-import com.p2glet_first.p2glet_sns.R
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.p2glet_first.p2glet_sns.R
 import kotlinx.android.synthetic.main.activity_add_photo.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
+import kotlinx.android.synthetic.main.item_detail.*
 import kotlinx.android.synthetic.main.item_detail.view.*
+import pinocchio22.p2glet_first.p2glet_sns.ChatActivity
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 /**
  * @author CHOI
@@ -43,8 +44,12 @@ class DetailViewFragment : Fragment() {
     val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
     val curTime = dateFormat.format(Date(time))
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container,false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_detail, container, false)
         firestore = FirebaseFirestore.getInstance()
         uid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -78,7 +83,11 @@ class DetailViewFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail, parent, false)
+            var view = LayoutInflater.from(parent.context).inflate(
+                R.layout.item_detail,
+                parent,
+                false
+            )
             return CustomViewHolder(view)
         }
 
@@ -93,14 +102,16 @@ class DetailViewFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholder = (holder as CustomViewHolder).itemView
 
-            //Report User
+            //Block abusive user
             removerUser(position, holder)
 
             //UserId
             viewholder.detailviewitem_profile_textview.text = contentDTOs!![position].userId
 
             //Image
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_imageview_content)
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(
+                viewholder.detailviewitem_imageview_content
+            )
 
             //Explain of content
             viewholder.detailviewitem_explain_textview.text = contentDTOs!![position].explain
@@ -115,7 +126,9 @@ class DetailViewFragment : Fragment() {
                 if (documentSnapshot.data != null) {
                     var url = documentSnapshot?.data!!["image"]
 //                Log.d("액티비티", requireContext().toString())
-                    Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
+                    Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(
+                        viewholder.detailviewitem_profile_image
+                    )
                 }
             }
 
@@ -138,7 +151,10 @@ class DetailViewFragment : Fragment() {
                 bundle.putString("destinationUid", contentDTOs[position].uid)
                 bundle.putString("userId", contentDTOs[position].userId)
                 fragment.arguments = bundle
-                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content, fragment)?.commit()
+                activity?.supportFragmentManager?.beginTransaction()?.replace(
+                    R.id.main_content,
+                    fragment
+                )?.commit()
             }
             viewholder.detailviewitem_comment_imageview.setOnClickListener() { v ->
                 var intent = Intent(v.context, ChatActivity::class.java)
@@ -167,7 +183,7 @@ class DetailViewFragment : Fragment() {
             }
         }
 
-        fun favoriteAlarm (destinationUid : String) {
+        fun favoriteAlarm(destinationUid: String) {
             var alarmDTO = AlarmDTO()
             alarmDTO.destinationUid = destinationUid
             alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
@@ -180,17 +196,20 @@ class DetailViewFragment : Fragment() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
 
-        fun removerUser(position : Int, holder : RecyclerView.ViewHolder) {
+        fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
             var tsDoc = firestore?.collection("report")?.document(uid!!)
             firestore?.runTransaction { transaction ->
                 var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
-                Log.d("게시글유저", contentDTOs[position].uid.toString())
-                Log.d("신고유저", reportDTO?.destinationUid.toString())
-                Log.d("신고여부유저", reportDTO!!.report.containsKey(contentDTOs[position].uid).toString())
-                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(contentDTOs[position].uid)) {
-                    holder.itemView.detailviewitem_imageview_content.visibility = View.GONE
+                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
+                        contentDTOs[position].uid
+                    )) {
+                    //hide blocked users
+                    holder.itemView.detailviewitem_main.visibility = View.GONE
+                }else {
+                    holder.itemView.detailviewitem_main.visibility = View.VISIBLE
                 }
             }
+            notifyDataSetChanged()
         }
     }
 }
