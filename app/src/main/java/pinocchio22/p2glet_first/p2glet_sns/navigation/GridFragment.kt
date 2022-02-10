@@ -11,10 +11,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.p2glet_first.p2glet_sns.R
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_grid.view.*
+import kotlinx.android.synthetic.main.item_detail.view.*
+import pinocchio22.p2glet_first.p2glet_sns.MainActivity
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
 
 /**
  * @author CHOI
@@ -26,8 +30,10 @@ class GridFragment : Fragment() {
 
     var firestore : FirebaseFirestore? = null
     var fragmentView : View? = null
+    var uid : String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        uid = FirebaseAuth.getInstance().currentUser?.uid
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false)
         firestore = FirebaseFirestore.getInstance()
         fragmentView?.gridfragment_recyclerview?.adapter = UserFragmentRecyclerViewAdapter()
@@ -63,10 +69,28 @@ class GridFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var imageView = (holder as CustomViewHolder).imageView
             Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
+            removerUser(position, holder)
         }
 
         override fun getItemCount(): Int {
             return contentDTOs.size
+        }
+
+        fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
+            var tsDoc = firestore?.collection("report")?.document(uid!!)
+            firestore?.runTransaction { transaction ->
+                var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
+                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
+                        contentDTOs[position].uid
+                    )) {
+                    //hide blocked users
+                    holder.itemView.detailviewitem_main.visibility = View.GONE
+                    notifyDataSetChanged()
+                }else {
+                    holder.itemView.detailviewitem_main.visibility = View.VISIBLE
+                    notifyDataSetChanged()
+                }
+            }
         }
 
     }

@@ -1,12 +1,14 @@
 package pinocchio22.p2glet_first.p2glet_sns.navigation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -41,6 +43,7 @@ class DetailViewFragment : Fragment() {
     var uid : String? = null
 
     val time = System.currentTimeMillis()
+    @SuppressLint("SimpleDateFormat")
     val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
     val curTime = dateFormat.format(Date(time))
 
@@ -61,25 +64,26 @@ class DetailViewFragment : Fragment() {
     }
 
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
-        var contentUidList : ArrayList<String> = arrayListOf()
+        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
+        var contentUidList: ArrayList<String> = arrayListOf()
 
         init {
             view?.detailviewfragment_recyclerview?.removeAllViews()
-            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener{ querySnapshot, firebaseFirestoreException ->
-                contentDTOs.clear()
-                contentUidList.clear()
+            firestore?.collection("images")?.orderBy("timestamp")
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    contentDTOs.clear()
+                    contentUidList.clear()
 
-                //Sometimes, This code return null of querySnapshot when it sign-out
-                if (querySnapshot == null) return@addSnapshotListener
+                    //Sometimes, This code return null of querySnapshot when it sign-out
+                    if (querySnapshot == null) return@addSnapshotListener
 
-                for(snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(ContentDTO::class.java)
-                    contentDTOs.add(item!!)
-                    contentUidList.add(snapshot.id)
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(ContentDTO::class.java)
+                        contentDTOs.add(item!!)
+                        contentUidList.add(snapshot.id)
+                    }
+                    notifyDataSetChanged()
                 }
-                notifyDataSetChanged()
-            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -117,30 +121,32 @@ class DetailViewFragment : Fragment() {
             viewholder.detailviewitem_explain_textview.text = contentDTOs!![position].explain
 
             //likes
-            viewholder.detailviewitem_favoritecounter_textview.text = "Likes" + contentDTOs!![position].favoriteCount
+            viewholder.detailviewitem_favoritecounter_textview.text =
+                "Likes" + contentDTOs!![position].favoriteCount
 
 //            //ProfileImage
 //            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
-            firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                if (documentSnapshot == null) return@addSnapshotListener
-                if (documentSnapshot.data != null) {
-                    var url = documentSnapshot?.data!!["image"]
+            firestore?.collection("profileImages")?.document(uid!!)
+                ?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                    if (documentSnapshot == null) return@addSnapshotListener
+                    if (documentSnapshot.data != null) {
+                        var url = documentSnapshot?.data!!["image"]
 //                Log.d("액티비티", requireContext().toString())
-                    Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(
-                        viewholder.detailviewitem_profile_image
-                    )
+                        Glide.with(context).load(url).apply(RequestOptions().circleCrop()).into(
+                            viewholder.detailviewitem_profile_image
+                        )
+                    }
                 }
-            }
 
             //This code is when the button is clicked
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {
                 favoriteEvent(position)
             }
             //This code is when the page is loaded
-            if (contentDTOs!![position].favorites.containsKey(uid)){
+            if (contentDTOs!![position].favorites.containsKey(uid)) {
                 //This is like status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
-            }else {
+            } else {
                 //This is unlike status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
@@ -163,17 +169,18 @@ class DetailViewFragment : Fragment() {
                 startActivity(intent)
             }
         }
+
         fun favoriteEvent(position: Int) {
             var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
-            firestore?.runTransaction{ transaction ->
+            firestore?.runTransaction { transaction ->
 
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
 
-                if (contentDTO!!.favorites.containsKey(uid)){
+                if (contentDTO!!.favorites.containsKey(uid)) {
                     //when the button is clicked
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount - 1
                     contentDTO?.favorites.remove(uid)
-                }else {
+                } else {
                     //when the button is not clicked
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
                     contentDTO?.favorites[uid!!] = true
@@ -192,24 +199,47 @@ class DetailViewFragment : Fragment() {
             alarmDTO.timestamp = curTime
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
-            var message = FirebaseAuth.getInstance().currentUser?.email + getString(R.string.alarm_favorite)
+            var message =
+                FirebaseAuth.getInstance().currentUser?.email + getString(R.string.alarm_favorite)
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
 
         fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
             var tsDoc = firestore?.collection("report")?.document(uid!!)
+            var contentDTOs2 : ArrayList<ContentDTO> = arrayListOf()
             firestore?.runTransaction { transaction ->
                 var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
                 if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
                         contentDTOs[position].uid
-                    )) {
-                    //hide blocked users
-                    holder.itemView.detailviewitem_main.visibility = View.GONE
+                    )
+                ) {
+                    contentDTOs.removeAt(position)
+                    contentDTOs2.addAll(contentDTOs)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, contentDTOs.size)
+                    contentDTOs.addAll(contentDTOs2)
                 }else {
                     holder.itemView.detailviewitem_main.visibility = View.VISIBLE
                 }
             }
-            notifyDataSetChanged()
+        }
+    }
+
+    fun refreshFragment() {
+        val ft = requireFragmentManager().beginTransaction()
+        ft.detach(this).attach(this).commit()
+    }
+
+    private fun removeFragment(fragment: Fragment) {
+        var fragment: Fragment? = fragment
+        if (fragment != null) {
+            val mFragmentManager: FragmentManager = requireActivity().supportFragmentManager
+            val mFragmentTransaction: FragmentTransaction = mFragmentManager.beginTransaction()
+            mFragmentTransaction.remove(fragment)
+            mFragmentTransaction.commit()
+            fragment.onDestroy()
+            fragment.onDetach()
+            fragment = null
         }
     }
 }
