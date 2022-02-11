@@ -273,23 +273,4 @@ class PostActivity : AppCompatActivity() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
     }
-
-//    private fun deleteItem(position: Int) {
-//        mStorage.getReference().child("userImages").child("uid/").child(contentslist.get(position).photoName).delete()
-//                .addOnSuccessListener(object : OnSuccessListener<Void?> {
-//                    fun onSuccess(aVoid: Void?) {
-//                        // removeValue 말고 setValue(null)도 삭제가능
-//                        mDatabase.getReference().child("contents").child("content").child(uidLists.get(position)).removeValue()
-//                                .addOnSuccessListener(object : OnSuccessListener<Void?> {
-//                                    fun onSuccess(aVoid: Void?) {
-//                                        Toast.makeText(this@Today_MainActivity, "삭제 완료", Toast.LENGTH_LONG).show()
-//                                    }
-//                                }).addOnFailureListener(OnFailureListener
-//                                // DB에서 Fail날경우는 거의 없음..
-//                                {
-//                                    // fail ui
-//                                })
-//                    }
-//                }).addOnFailureListener(OnFailureListener { Toast.makeText(this@Today_MainActivity, "삭제 실패", Toast.LENGTH_LONG).show() })
-//    }
 }

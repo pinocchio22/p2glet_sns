@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -32,6 +29,7 @@ import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -43,6 +41,8 @@ import java.util.*
 class DetailViewFragment : Fragment() {
     var firestore : FirebaseFirestore? = null
     var uid : String? = null
+    var adapter : DetailViewRecyclerViewAdapter? = null
+    var contentDTOs2 = mutableListOf<ContentDTO>()
 
     val time = System.currentTimeMillis()
     @SuppressLint("SimpleDateFormat")
@@ -60,7 +60,8 @@ class DetailViewFragment : Fragment() {
 
         view.detailviewfragment_recyclerview.adapter = DetailViewRecyclerViewAdapter()
         view.detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
-//        DetailViewRecyclerViewAdapter().notifyDataSetChanged()
+
+        DetailViewRecyclerViewAdapter().notifyDataSetChanged()
 
         return view
     }
@@ -214,18 +215,32 @@ class DetailViewFragment : Fragment() {
                         contentDTOs[position].uid
                     )
                 ) {
-                    contentDTOs[position].userId = null
+//                    contentDTOs[position].userId = null
+//                    contentDTOs[position].imageUrl = null
 //                    contentDTOs.removeAt(position)
-//                    contentDTOs2.addAll(contentDTOs)
                     Log.d("ww1", contentDTOs.toString())
+                    refreshAdapter(contentDTOs, position)
+                    adapter?.notifyDataSetChanged()
 //                    notifyDataSetChanged()
 //                    notifyItemChanged(position)
 //                    notifyItemRemoved(position)
 //                    notifyItemRangeChanged(position, contentDTOs.size)
-//                    contentDTOs.addAll(contentDTOs2)
 
                 }
             }
+        }
+
+        fun refreshAdapter(data: MutableList<ContentDTO>, position: Int) {
+            data.removeAt(position)
+//            Log.d("ww2", contentDTOs2.toString())
+            contentDTOs2.addAll(data)
+//            Log.d("ww3", data.toString())
+            data.clear()
+//            Log.d("ww4", data.toString())
+            data.addAll(contentDTOs2)
+            adapter?.notifyItemInserted(position)
+            adapter?.notifyItemRemoved(position)
+//            Log.d("ww5", contentDTOs.toString())
         }
     }
 }
