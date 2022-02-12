@@ -6,7 +6,7 @@ package pinocchio22.p2glet_first.p2glet_sns.navigation.model
  * @created 2022-01-14
  * @desc
  */
-class ReportDTO (
+data class ReportDTO (
     var destinationUid : String? = null,
     var userId : String? = null,
     var uid : String? = null,

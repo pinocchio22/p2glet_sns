@@ -39,12 +39,10 @@ import kotlin.collections.ArrayList
  * @desc
  */
 class DetailViewFragment : Fragment() {
-    var firestore : FirebaseFirestore? = null
-    var uid : String? = null
-    var adapter : DetailViewRecyclerViewAdapter? = null
-    var contentDTOs2 = mutableListOf<ContentDTO>()
-
+    var firestore: FirebaseFirestore? = null
+    var uid: String? = null
     val time = System.currentTimeMillis()
+
     @SuppressLint("SimpleDateFormat")
     val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
     val curTime = dateFormat.format(Date(time))
@@ -67,11 +65,22 @@ class DetailViewFragment : Fragment() {
     }
 
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+        private var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
         var contentUidList: ArrayList<String> = arrayListOf()
+        var reportDTO: ArrayList<ReportDTO> = arrayListOf()
 
         init {
             view?.detailviewfragment_recyclerview?.removeAllViews()
+            firestore?.collection("report")?.orderBy("destinationUid")
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    reportDTO.clear()
+                    if (querySnapshot == null) return@addSnapshotListener
+                    for (snapshot in querySnapshot.documents) {
+                        var item = snapshot.toObject(ReportDTO::class.java)
+                        reportDTO.add(item!!)
+                    }
+                    notifyDataSetChanged()
+                }
             firestore?.collection("images")?.orderBy("timestamp")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     contentDTOs.clear()
@@ -79,11 +88,22 @@ class DetailViewFragment : Fragment() {
 
                     //Sometimes, This code return null of querySnapshot when it sign-out
                     if (querySnapshot == null) return@addSnapshotListener
-
                     for (snapshot in querySnapshot!!.documents) {
                         var item = snapshot.toObject(ContentDTO::class.java)
-                        contentDTOs.add(item!!)
-                        contentUidList.add(snapshot.id)
+                        if (reportDTO.size == 0) {
+                            contentDTOs.add(item!!)
+                        }
+                        for (i in 0 until reportDTO.size) {
+                            contentUidList.add(snapshot.id)
+                            when {
+                                item?.uid == reportDTO[i].destinationUid && reportDTO[i].report.containsKey(item?.uid) -> {
+                                    //block user's post
+                                }
+                                else -> {
+                                    contentDTOs.add(item!!)
+                                }
+                            }
+                        }
                     }
                     notifyDataSetChanged()
                 }
@@ -170,7 +190,7 @@ class DetailViewFragment : Fragment() {
             }
 
             //Block abusive user
-            removerUser(position, holder)
+//            removerUser(position, holder)
         }
 
         fun favoriteEvent(position: Int) {
@@ -207,40 +227,28 @@ class DetailViewFragment : Fragment() {
             FcmPush.instance.sendMessage(destinationUid, "p2glet_sns", message)
         }
 
-        fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
-            var tsDoc = firestore?.collection("report")?.document(uid!!)
-            firestore?.runTransaction { transaction ->
-                var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
-                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
-                        contentDTOs[position].uid
-                    )
-                ) {
-//                    contentDTOs[position].userId = null
-//                    contentDTOs[position].imageUrl = null
-//                    contentDTOs.removeAt(position)
-                    Log.d("ww1", contentDTOs.toString())
-                    refreshAdapter(contentDTOs, position)
-                    adapter?.notifyDataSetChanged()
-//                    notifyDataSetChanged()
-//                    notifyItemChanged(position)
-//                    notifyItemRemoved(position)
-//                    notifyItemRangeChanged(position, contentDTOs.size)
+//        fun removerUser(position: Int, holder: RecyclerView.ViewHolder) {
+//            var tsDoc = firestore?.collection("report")?.document(uid!!)
+//            firestore?.runTransaction { transaction ->
+//                var reportDTO = transaction.get(tsDoc!!).toObject(ReportDTO::class.java)
+//                if (contentDTOs[position].uid == reportDTO?.destinationUid && reportDTO!!.report.containsKey(
+//                        contentDTOs[position].uid
+//                    )
+//                ) {
+//                    Log.d("ww1", contentDTOs.toString())
+//                    refreshAdapter(contentDTOs, position)
+//                    adapter?.notifyDataSetChanged()
+//                }
+//            }
+//        }
 
-                }
-            }
-        }
-
-        fun refreshAdapter(data: MutableList<ContentDTO>, position: Int) {
-            data.removeAt(position)
-//            Log.d("ww2", contentDTOs2.toString())
-            contentDTOs2.addAll(data)
-//            Log.d("ww3", data.toString())
-            data.clear()
-//            Log.d("ww4", data.toString())
-            data.addAll(contentDTOs2)
-            adapter?.notifyItemInserted(position)
-            adapter?.notifyItemRemoved(position)
-//            Log.d("ww5", contentDTOs.toString())
-        }
+//        fun refreshAdapter(data: MutableList<ContentDTO>, position: Int) {
+//            data.removeAt(position)
+//            contentDTOs2.addAll(data)
+//            data.clear()
+//            data.addAll(contentDTOs2)
+//            adapter?.notifyItemInserted(position)
+//            adapter?.notifyItemRemoved(position)
+//        }
     }
 }

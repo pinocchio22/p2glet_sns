@@ -44,17 +44,57 @@ class GridFragment : Fragment() {
 
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+        var reportDTO: ArrayList<ReportDTO> = arrayListOf()
         init {
-            firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
-                //Somtimes, This code return null of querySnapshot when it signout
-                if (querySnapshot == null) return@addSnapshotListener
+//            firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestore ->
+//                //Somtimes, This code return null of querySnapshot when it signout
+//                if (querySnapshot == null) return@addSnapshotListener
+//
+//                //Get data
+//                for (snapshot in querySnapshot.documents) {
+//                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
+//                }
+//                notifyDataSetChanged()
+//            }
+            firestore?.collection("report")?.orderBy("destinationUid")
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    reportDTO.clear()
+                    if (querySnapshot == null) return@addSnapshotListener
 
-                //Get data
-                for (snapshot in querySnapshot.documents) {
-                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(ReportDTO::class.java)
+
+                        // block user 제외
+                        reportDTO.add(item!!)
+                    }
+                    notifyDataSetChanged()
                 }
-                notifyDataSetChanged()
-            }
+            firestore?.collection("images")?.orderBy("timestamp")
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    contentDTOs.clear()
+
+                    //Sometimes, This code return null of querySnapshot when it sign-out
+                    if (querySnapshot == null) return@addSnapshotListener
+
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(ContentDTO::class.java)
+
+                        if (reportDTO.size == 0) {
+                            contentDTOs.add(item!!)
+                        }
+                        for (i in 0 until reportDTO.size) {
+                            when {
+                                item?.uid == reportDTO[i].destinationUid && reportDTO[i].report.containsKey(item?.uid) -> {
+                                    //block user's post
+                                }
+                                else -> {
+                                    contentDTOs.add(item!!)
+                                }
+                            }
+                        }
+                    }
+                    notifyDataSetChanged()
+                }
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             var width = resources.displayMetrics.widthPixels / 3
