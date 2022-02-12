@@ -1,6 +1,5 @@
 package pinocchio22.p2glet_first.p2glet_sns.navigation
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -13,33 +12,29 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import pinocchio22.p2glet_first.p2glet_sns.LoginActivity
-import pinocchio22.p2glet_first.p2glet_sns.MainActivity
-import pinocchio22.p2glet_first.p2glet_sns.PostActivity
-import com.p2glet_first.p2glet_sns.R
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.model.FollowDTO
-import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
+import com.p2glet_first.p2glet_sns.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.android.synthetic.main.item_post.view.*
+import pinocchio22.p2glet_first.p2glet_sns.LoginActivity
+import pinocchio22.p2glet_first.p2glet_sns.MainActivity
+import pinocchio22.p2glet_first.p2glet_sns.PostActivity
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.FollowDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -64,8 +59,16 @@ class UserFragment : Fragment() {
         var PICK_PROFILE_FROM_ALBUM = 10
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        fragmentView = LayoutInflater.from(activity).inflate(
+            R.layout.fragment_user,
+            container,
+            false
+        )
         uid = arguments?.getString("destinationUid")
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
@@ -76,6 +79,10 @@ class UserFragment : Fragment() {
             builder.apply {
                 setPositiveButton("확인") { dialogInterface, i ->
                     reportUser(uid!!)
+                    val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+                    fragmentManager.beginTransaction().remove(this@UserFragment).commit()
+                    fragmentManager.popBackStack()
+
                 }
                 setNegativeButton("취소") { dialogInterface, i ->
                 }
@@ -144,7 +151,12 @@ class UserFragment : Fragment() {
                 fragmentView?.account_tv_follower_count?.text = followDTO?.followerCount?.toString()
                 if (followDTO?.followers?.containsKey(currentUserUid)) {
                     fragmentView?.account_btn_follow_signout?.text = requireActivity().getString(R.string.follow_cancel)
-                    fragmentView?.account_btn_follow_signout?.background?.setColorFilter(ContextCompat.getColor(requireActivity(), R.color.colorLightGray), PorterDuff.Mode.MULTIPLY)
+                    fragmentView?.account_btn_follow_signout?.background?.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity(),
+                            R.color.colorLightGray
+                        ), PorterDuff.Mode.MULTIPLY
+                    )
                 } else {
                     if (context == null) {
                     } else {
@@ -229,7 +241,9 @@ class UserFragment : Fragment() {
             if (documentSnapshot == null) return@addSnapshotListener
             if (documentSnapshot.data != null) {
                 var url = documentSnapshot?.data!!["image"]
-                Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile)
+                Glide.with(activity).load(url).apply(RequestOptions().circleCrop()).into(
+                    fragmentView?.account_iv_profile
+                )
             }
         }
     }
@@ -292,7 +306,7 @@ class UserFragment : Fragment() {
                 fragmentView?.account_tv_post_count?.text = contentDTOs.size.toString()
                 notifyDataSetChanged()
             }
-            Log.d("wwuser",contentDTOs.toString())
+            Log.d("wwuser", contentDTOs.toString())
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -309,7 +323,9 @@ class UserFragment : Fragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var imageView = (holder as CustomViewHolder).imageView
-            Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageView)
+            Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(
+                RequestOptions().centerCrop()
+            ).into(imageView)
             holder.imageView.setOnClickListener {
                 var intent = Intent(context, PostActivity::class.java)
                 intent.putExtra("userId", uid)
