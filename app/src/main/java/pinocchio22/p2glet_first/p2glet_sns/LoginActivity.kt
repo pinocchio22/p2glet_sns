@@ -41,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         auth = FirebaseAuth.getInstance()
         email_login_btn.setOnClickListener {
+            Log.d("에러", "!")
             signinAndSignup()
         }
         google_sign_in_button.setOnClickListener {
@@ -150,19 +151,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signinAndSignup() {
-        auth?.createUserWithEmailAndPassword(
-            email_edittext.text.toString(),
-            password_edittext.text.toString()
-        )?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                //Creating a user account
-                moveMainPage(task.result?.user)
-            }else if (task.exception?.message.isNullOrEmpty()){
-                //show the error messagge
-                Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
-            }else {
-                //Login if you have account
-                signinEmail()
+        when {
+            email_edittext.text.toString().isEmpty() -> {
+                Toast.makeText(this, "이메일을 입력하세요", Toast.LENGTH_LONG).show()
+            }
+            password_edittext.text.toString().isEmpty() -> {
+                Toast.makeText(this, "비밀번호를 입력하세요", Toast.LENGTH_LONG).show()
+            }
+            else -> {
+                auth?.createUserWithEmailAndPassword(email_edittext.text.toString(), password_edittext.text.toString())
+                    ?.addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            //Creating a user account
+                            moveMainPage(task.result?.user) }
+                        else if (task.exception?.message.isNullOrEmpty()){
+                            //show the error messagge
+                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show() }
+                        else {
+                            //Login if you have account
+                            signinEmail()
+                        }
+                    }
             }
         }
     }
