@@ -12,7 +12,7 @@ android {
         applicationId "pinocchio22.p2glet_first.p2glet_sns"
         minSdkVersion 25
         targetSdkVersion 31
-        versionCode 7
+        versionCode 8
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
