@@ -146,7 +146,7 @@ class DetailViewFragment : Fragment() {
 
 //            //ProfileImage
 //            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
-            firestore?.collection("profileImages")?.document(uid!!)
+            firestore?.collection("profileImages")?.document(contentDTOs[position].uid!!)
                 ?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                     if (documentSnapshot == null) return@addSnapshotListener
                     if (documentSnapshot.data != null) {
