@@ -18,7 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/detailviewitem_profile_textview"
-            android:text="User name"/>
+            android:text="User name"
+            android:fontFamily="@font/nanum_amsterdam"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
     </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
@@ -47,15 +50,23 @@
             android:id="@+id/detailviewitem_comment_imageview"/>
     </LinearLayout>
     <TextView
+        android:layout_marginLeft="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="like 0"
-        android:id="@+id/detailviewitem_favoritecounter_textview"/>
+        android:id="@+id/detailviewitem_favoritecounter_textview"
+        android:fontFamily="@font/nanum_amsterdam"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Explain content"
         android:id="@+id/detailviewitem_explain_textview"
+        android:fontFamily="@font/nanum_amsterdam"
+        android:textStyle="bold"
+        android:textSize="20sp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"/>
 
