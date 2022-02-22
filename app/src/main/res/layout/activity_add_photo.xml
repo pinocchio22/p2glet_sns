@@ -41,7 +41,10 @@
             android:layout_height="100dp"
             android:gravity="top"
             android:id="@+id/addphoto_edit_explain"
-            android:hint="@string/hint_image_content"/>
+            android:hint="@string/hint_image_content"
+            android:fontFamily="@font/nanum_amsterdam"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:layout_width="match_parent"
@@ -50,7 +53,10 @@
         android:layout_toRightOf="@id/addphoto_image"
         android:layout_below="@id/editText"
         android:theme="@style/ButtonStyle"
-        android:text="Upload Photo" />
+        android:text="Upload Photo"
+        android:fontFamily="@font/nanum_amsterdam"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
 
     <ProgressBar
         android:id="@+id/upload_progress"
@@ -63,6 +69,9 @@
         android:layout_height="wrap_content"
         android:text="올리는중.."
         android:layout_centerInParent="true"
-        android:layout_below="@id/upload_progress"/>
+        android:layout_below="@id/upload_progress"
+        android:fontFamily="@font/nanum_amsterdam"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
 
 </RelativeLayout>

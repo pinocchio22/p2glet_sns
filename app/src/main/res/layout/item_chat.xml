@@ -32,19 +32,26 @@
                 android:layout_height="wrap_content"
                 android:text="이름"
                 android:textColor="#000000"
-                android:textStyle="bold" />
+                android:fontFamily="@font/nanum_amsterdam"
+                android:textStyle="bold"
+                android:textSize="18sp" />
             <TextView
                 android:id="@+id/messageItem_textView_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="메세지"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:fontFamily="@font/nanum_amsterdam"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
             <TextView
                 android:id="@+id/messageItem_textView_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="시간"
+                android:fontFamily="@font/nanum_amsterdam"
+                android:textStyle="bold"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
