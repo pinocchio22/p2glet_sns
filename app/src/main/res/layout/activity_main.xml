@@ -72,5 +72,6 @@
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@color/colorNavIcon"
         app:itemTextColor="@color/colorNavIcon"
-        app:menu="@menu/bottom_navigation_main" />
+        app:menu="@menu/bottom_navigation_main"
+        android:theme="@style/Widget.BottomNavigationView" />
 </RelativeLayout>

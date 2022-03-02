@@ -10,4 +10,8 @@
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorWhite</item>
     </style>
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/nanum_amsterdam</item>
+    </style>
 </resources>
