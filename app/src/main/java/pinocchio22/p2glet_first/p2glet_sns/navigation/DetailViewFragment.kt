@@ -88,6 +88,8 @@ class DetailViewFragment : Fragment() {
 
                     //Sometimes, This code return null of querySnapshot when it sign-out
                     if (querySnapshot == null) return@addSnapshotListener
+
+                    //if you report some users, hide reported user's post
                     for (snapshot in querySnapshot!!.documents) {
                         var item = snapshot.toObject(ContentDTO::class.java)
                         if (reportDTO.size == 0) {
