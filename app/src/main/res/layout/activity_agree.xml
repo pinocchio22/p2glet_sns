@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context="pinocchio22.p2glet_first.p2glet_sns.AgreeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <CheckBox
+            android:id="@+id/allCheckBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="모두 동의합니다." />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/firstCheckBtn"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:text="[필수] p2glet gallery 서비스 이용약관" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/string_agree"
+            android:textSize="10sp"
+            android:background="@android:color/transparent"
+            android:id="@+id/firstCheckBtn_add"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/secondCheckBtn"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="[필수] 개인정보 수집 및 이용약관" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/string_agree"
+            android:textSize="10sp"
+            android:background="@android:color/transparent"
+            android:id="@+id/secondCheckBtn_add"/>
+    </LinearLayout>
+
+
+</LinearLayout>

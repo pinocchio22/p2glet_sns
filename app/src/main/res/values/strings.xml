@@ -60,5 +60,6 @@
     <!-- etc -->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+    <string name="string_agree"><u>보기</u></string>
 </resources>
 
