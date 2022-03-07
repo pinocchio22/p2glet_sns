@@ -28,6 +28,10 @@ class AgreeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        if (firstCheckBtn.isChecked && secondCheckBtn.isChecked) {
+            next_Btn.isEnabled
+        }
+
     }
 
     private fun onCheckChanged(compoundButton: CompoundButton) {

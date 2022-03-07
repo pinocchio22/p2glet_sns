@@ -58,5 +58,15 @@
             android:id="@+id/secondCheckBtn_add"/>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/next_Btn"
+        android:layout_margin="20dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:text="확인"
+        android:background="@color/colorPrimary"
+        android:enabled="false" />
+
 
 </LinearLayout>
