@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 import pinocchio22.p2glet_first.p2glet_sns.ChatActivity
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.AlarmDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ContentDTO
+import pinocchio22.p2glet_first.p2glet_sns.navigation.model.FollowDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.ReportDTO
 import pinocchio22.p2glet_first.p2glet_sns.navigation.util.FcmPush
 import java.text.SimpleDateFormat
@@ -94,6 +95,7 @@ class DetailViewFragment : Fragment() {
                         var item = snapshot.toObject(ContentDTO::class.java)
                         if (reportDTO.size == 0) {
                             contentDTOs.add(item!!)
+                            contentUidList.add(snapshot.id)
                         }
                         for (i in 0 until reportDTO.size) {
                             contentUidList.add(snapshot.id)
@@ -143,8 +145,7 @@ class DetailViewFragment : Fragment() {
             viewholder.detailviewitem_explain_textview.text = contentDTOs!![position].explain
 
             //likes
-            viewholder.detailviewitem_favoritecounter_textview.text =
-                "Likes" + contentDTOs!![position].favoriteCount
+            viewholder.detailviewitem_favoritecounter_textview.text = "Likes" + contentDTOs!![position].favoriteCount
 
 //            //ProfileImage
 //            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
@@ -200,18 +201,18 @@ class DetailViewFragment : Fragment() {
             firestore?.runTransaction { transaction ->
 
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
-
                 if (contentDTO!!.favorites.containsKey(uid)) {
                     //when the button is clicked
-                    contentDTO?.favoriteCount = contentDTO?.favoriteCount - 1
-                    contentDTO?.favorites.remove(uid)
+                    contentDTO.favoriteCount = contentDTO.favoriteCount - 1
+                    contentDTO.favorites.remove(uid)
                 } else {
                     //when the button is not clicked
-                    contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
-                    contentDTO?.favorites[uid!!] = true
+                    contentDTO.favoriteCount = contentDTO.favoriteCount + 1
+                    contentDTO.favorites[uid!!] = true
                     favoriteAlarm(contentDTOs[position].uid!!)
                 }
                 transaction.set(tsDoc, contentDTO)
+                return@runTransaction
             }
         }
 
