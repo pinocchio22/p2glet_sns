@@ -17,7 +17,7 @@ class FcmPush {
 
     var JSON = MediaType.parse("application/json; charset=utf-8")
     var url = "https://fcm.googleapis.com/fcm/send"
-    var serverKey = "AAAAcSMHTL0:APA91bGWYEcTlnmcY_faJftbkw50KVAeCsKj4aNFmRiuAlKQPtkK6rm7j9A7eS8qoqPRQjhQNK2hdo_nyCCgI8qpx9MvVvbitzP41ouZqzTpAsLA330aFF16EQSofzGRux66jYBH-USM"
+    var serverKey = "serverkey"
     var gson : Gson? = null
     var okHttpClient : OkHttpClient? = null
 
