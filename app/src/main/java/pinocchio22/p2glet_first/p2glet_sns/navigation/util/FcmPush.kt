@@ -1,5 +1,6 @@
 package pinocchio22.p2glet_first.p2glet_sns.navigation.util
 
+import android.util.Log
 import pinocchio22.p2glet_first.p2glet_sns.navigation.model.PushDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -16,7 +17,7 @@ class FcmPush {
 
     var JSON = MediaType.parse("application/json; charset=utf-8")
     var url = "https://fcm.googleapis.com/fcm/send"
-    var serverKey = "server key"
+    var serverKey = "AAAAcSMHTL0:APA91bGWYEcTlnmcY_faJftbkw50KVAeCsKj4aNFmRiuAlKQPtkK6rm7j9A7eS8qoqPRQjhQNK2hdo_nyCCgI8qpx9MvVvbitzP41ouZqzTpAsLA330aFF16EQSofzGRux66jYBH-USM"
     var gson : Gson? = null
     var okHttpClient : OkHttpClient? = null
 
@@ -32,6 +33,7 @@ class FcmPush {
     fun sendMessage (destinationUid : String, title : String, message : String) {
         FirebaseFirestore.getInstance().collection("pushtokens").document(destinationUid).get().addOnCompleteListener {
             task ->
+            Log.d("토큰", destinationUid)
             if (task.isSuccessful) {
                 var token = task?.result?.get("pushToken").toString()
                 var pushDTO = PushDTO()
@@ -54,6 +56,7 @@ class FcmPush {
 
                     override fun onResponse(call: Call?, response: Response?) {
                         println(response?.body()?.string())
+
                     }
 
                 })
