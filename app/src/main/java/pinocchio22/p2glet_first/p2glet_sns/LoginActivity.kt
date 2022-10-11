@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
             facebookLogin()
         }
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken("485918985405-f0bt109rb85ngf9rimubd9909kik0soa.apps.googleusercontent.com")
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)

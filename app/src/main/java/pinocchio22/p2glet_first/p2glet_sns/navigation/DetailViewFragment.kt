@@ -185,7 +185,7 @@ class DetailViewFragment : Fragment() {
                     fragment
                 )?.commit()
             }
-            viewholder.detailviewitem_comment_imageview.setOnClickListener() { v ->
+            viewholder.detailviewitem_comment_imageview.setOnClickListener { v ->
                 var intent = Intent(v.context, ChatActivity::class.java)
                 intent.putExtra("destinationUid", contentDTOs[position].uid)
                 intent.putExtra("contentUid", contentUidList[position])

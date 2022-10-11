@@ -105,7 +105,6 @@ class PostActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
             var viewholder = (holder as CustomViewHolder).itemView
 
             if (uid == FirebaseAuth.getInstance().currentUser?.uid) {

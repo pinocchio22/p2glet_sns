@@ -113,15 +113,15 @@ class UserFragment : Fragment() {
             }
             fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
             var mainactivity = (activity as MainActivity)
-            mainactivity?.toolbar_username?.text = arguments?.getString("userId")
-            mainactivity?.toolbar_btn_back?.setOnClickListener {
+            mainactivity.toolbar_username?.text = arguments?.getString("userId")
+            mainactivity.toolbar_btn_back?.setOnClickListener {
                 mainactivity.bottom_navigation.selectedItemId = R.id.action_home
             }
-            mainactivity?.toolbar_title_image?.visibility = View.GONE
-            mainactivity?.toolbar_username?.visibility = View.VISIBLE
-            mainactivity?.toolbar_btn_back?.visibility = View.VISIBLE
-            mainactivity?.user_report?.visibility = View.VISIBLE
-            mainactivity?.user_report?.setOnClickListener {
+            mainactivity.toolbar_title_image?.visibility = View.GONE
+            mainactivity.toolbar_username?.visibility = View.VISIBLE
+            mainactivity.toolbar_btn_back?.visibility = View.VISIBLE
+            mainactivity.user_report?.visibility = View.VISIBLE
+            mainactivity.user_report?.setOnClickListener {
                 //This is report button
                 alertDialog?.setMessage("확인을 누르시면 사용자가 신고됩니다.")
                 alertDialog?.show()
